@@ -66,7 +66,7 @@ class CoinsImporter:
     def __init__(self, base_url: str, use_proxy: bool = False, log_file=None):
         self.log_file = log_file
         self.base_url = base_url
-        self.proxy = "http://user130949:fduqey@159.148.253.16:8630" if use_proxy else None
+        self.proxy = "http://user130949:fduqey@195.2.248.140:8630" if use_proxy else None
         self.client = httpx.Client(headers=self.headers, timeout=40.0, verify=False, proxy=self.proxy)
 
     def write_log(self, str_log):
@@ -227,7 +227,7 @@ class CoinsImporter:
                 "name", "symbol", "source_page", "market_cap_rank", "format_price",
                 "market_cap_presale", "is_published", "launch_date", "last_price_update",
                 "published_at", "popularity_rank", "popularity_updated_at",
-                "security_rank", "security_updated_at", "gugu_rank",
+                "security_updated_at", "gugu_rank",
                 "price_change_24h", "price_change_1h", "buys_h1", "sells_h1",
                 "buys_h24", "sells_h24", "views", "votes", "votes24h",
                 "popularity_score", "security_score", "gugu_score"
