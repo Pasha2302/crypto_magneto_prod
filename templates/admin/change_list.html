@@ -1,0 +1,13 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'app/css/admin/change_list/base-change-list-style.css' %}" />
+{% endblock %}
+
+
+{% block footer %}
+{{ block.super }}
+<script type="module" src="{% static 'app/js/admin/change_list/main.js' %}"></script>
+{% endblock %}

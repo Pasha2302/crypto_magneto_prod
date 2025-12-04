@@ -1,0 +1,48 @@
+{% extends 'admin/base_site.html' %}
+{% load static %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'app/css/admin/change_list/db_connect_list/db_monitor_page/style.css' %}" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+
+{% block content %}
+  <div class="db-monitor-container">
+    <h1>DB Connections Monitor</h1>
+
+    <div class="range-buttons">
+      <button class="range-btn active" data-range="day" onclick="updateRange('day')">1 Day</button>
+      <button class="range-btn" data-range="week" onclick="updateRange('week')">1 Week</button>
+      <button class="range-btn" data-range="month" onclick="updateRange('month')">1 Month</button>
+    </div>
+
+    <div class="chart-box" style="height: 400px; max-width:100%; margin-bottom:20px;">
+      <h3>Active DB Connections</h3>
+      <p style="font-size:0.9rem; color:#555; margin-top:5px;">
+        Активные подключения к базе данных, которые в данный момент выполняют запросы.
+      </p>
+      <canvas id="activeChart"></canvas>
+    </div>
+
+    <div class="chart-box" style="height: 400px; max-width:100%; margin-bottom:20px;">
+      <h3>Idle DB Connections</h3>
+      <p style="font-size:0.9rem; color:#555; margin-top:5px;">
+        Бездействующие подключения к базе данных — открытые соединения, которые сейчас не выполняют запросы.
+      </p>
+      <canvas id="idleChart"></canvas>
+    </div>
+  </div>
+
+
+  <script>
+  const snapshots = {{ snapshots_json|safe }};
+</script>
+{% endblock %}
+
+
+{% block footer %}
+  {{ block.super }}
+  <script src="{% static 'app/js/admin/change_list/db_connect_list/db_monitor_page/db_connect_chart.js' %}"></script>
+{% endblock %}

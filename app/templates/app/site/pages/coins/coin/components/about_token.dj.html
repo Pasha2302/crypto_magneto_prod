@@ -1,0 +1,15 @@
+
+
+  {% if coin_obj.full_desc %}
+    <section class="token-about-section">
+      <div class="token-info-card">
+        <h3 class="token-section-title">About {{ coin_obj.name }}</h3>
+        <div class="about-token-content">
+          <div class="about-intro">
+            <h4>Introduction</h4>
+            {{ coin_obj.full_desc|linebreaks }}
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endif %}

@@ -1,0 +1,99 @@
+
+
+  <tbody>
+    {% for coin_d in coins %}
+      <tr>
+        {% if pagination_data %}
+          <td>{{ forloop.counter0|add:pagination_data.items_start_index }}</td>
+        {% else %}
+          <td>{{ forloop.counter }}</td>
+        {% endif %}
+
+        <td>
+          <a href="{% url 'coin_page_view' coin_d.chain.symbol coin_d.slug %}" class="coin-table__name-wrapper">
+            <div class="coin-name-cell">
+
+              {% if coin_d.image %}
+                <img class="coin-logo-small" src="{{ coin_d.image.url }}" alt="Image coin {{ coin_d.name }}" loading="lazy">
+              {% else %}
+                <img src="/media/default_placeholder.webp" class="chain-icon" alt="No Image" aria-label="No Image" loading="lazy">
+              {% endif %}
+
+              <div class="coin-info-cell">
+                <div class="coin-name-row">
+                  <span class="coin-name">{{ coin_d.name }}</span>
+                </div>
+                <div class="coin-subtitle">{{ coin_d.symbol }}</div>
+              </div>
+            </div>
+          </a>
+        </td>
+
+        <td>
+          <div class="status-column">
+            {% for obj_lable in coin_d.labels_coin %}
+              {% if obj_lable.name == 'Doxxed' %}
+                <span class="status-badge status-kyc">Doxxed</span>
+              {% elif obj_lable.name == 'Audited' %}
+                <span class="status-badge status-audited">Audited</span>
+              {% else %}
+                <span class="status-badge"></span>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </td>
+
+        <td>
+          <div class="chain-cell">
+            {% if coin_d.chain.image %}
+              <img 
+                src="{{ coin_d.chain.image.url }}" 
+                class="chain-icon" 
+                alt="{{ coin_d.chain.symbol }}" 
+                aria-label="{{ coin_d.chain.name }}" 
+                loading="lazy">
+            {% else %}
+              <img src="/media/default_placeholder.webp" class="chain-icon" alt="No Image" aria-label="No Image" loading="lazy">
+            {% endif %}
+
+            <span class="chain-name">{{ coin_d.chain.symbol }}</span>
+          </div>
+        </td>
+
+        {% if coin_d.market_cap %}
+          <td>${{ coin_d.market_cap }}</td>
+        {% elif coin_d.market_cap_presale %}
+          <td>
+            <div class="cap-presale">
+              <svg class="arrow"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-loading"></use></svg>
+              Presale
+            </div>
+          </td>
+        {% else %}
+          <td>—</td>
+        {% endif %}
+
+        <td>
+          <div>${{ coin_d.volume_usd }}</div>
+          <div class="volume-secondary">
+            {% if coin_d.volume_btc %}{{ coin_d.volume_btc }} BTC{% else %} — {% endif %}
+          </div>
+        </td>
+
+        {% if coin_d.format_price %}<td>${{ coin_d.format_price }}</td>{% else %}<td>—</td>{% endif %}
+
+        {% if coin_d.price_change_24h > 0 %}
+          <td class="change-positive" aria-label="Price change +{{ coin_d.price_change_24h }}%">+{{ coin_d.price_change_24h }}% ↑</td>
+        {% elif coin_d.price_change_24h < 0 %}
+          <td class="change-negative" aria-label="Price change {{ coin_d.price_change_24h }}%">{{ coin_d.price_change_24h }}% ↓</td>
+        {% elif coin_d.price_change_24h == 0 %}
+          <td class="change-neutral" aria-label="Price change 0.00%">0.00%</td>
+        {% else %}
+          <td>—</td>
+        {% endif %}
+
+        <td>In 2 months</td>
+      </tr>
+    {% endfor %}
+
+  </tbody>

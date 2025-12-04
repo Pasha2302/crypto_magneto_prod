@@ -1,0 +1,90 @@
+
+
+  <div class="buy-converter-wrapper">
+    <!-- Where to Buy -->
+    <section class="token-buy-section">
+      <div class="token-info-card">
+        <h3 class="token-section-title">Where to Buy</h3>
+        <div class="buy-exchanges-grid">
+          <a href="#" class="exchange-card">
+            <div class="exchange-logo">BNB</div>
+            <div class="exchange-info">
+              <div class="exchange-name">Binance</div>
+              <div class="exchange-type">CEX</div>
+            </div>
+          </a>
+          <a href="#" class="exchange-card">
+            <div class="exchange-logo">CB</div>
+            <div class="exchange-info">
+              <div class="exchange-name">Coinbase</div>
+              <div class="exchange-type">CEX</div>
+            </div>
+          </a>
+          <a href="#" class="exchange-card">
+            <div class="exchange-logo">UNI</div>
+            <div class="exchange-info">
+              <div class="exchange-name">Uniswap</div>
+              <div class="exchange-type">DEX</div>
+            </div>
+          </a>
+          <a href="#" class="exchange-card">
+            <div class="exchange-logo">KR</div>
+            <div class="exchange-info">
+              <div class="exchange-name">Kraken</div>
+              <div class="exchange-type">CEX</div>
+            </div>
+          </a>
+          <a href="#" class="exchange-card">
+            <div class="exchange-logo">PAN</div>
+            <div class="exchange-info">
+              <div class="exchange-name">PancakeSwap</div>
+              <div class="exchange-type">DEX</div>
+            </div>
+          </a>
+          <a href="#" class="exchange-card">
+            <div class="exchange-logo">OKX</div>
+            <div class="exchange-info">
+              <div class="exchange-name">OKX</div>
+              <div class="exchange-type">CEX</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Coin Converter -->
+    <section class="token-converter-section">
+      <div class="token-info-card">
+        <h3 class="token-section-title">Coin Converter</h3>
+        <div class="converter-container">
+          <div class="converter-input-group">
+            <div class="converter-amount">
+              <input type="number" id="converter-amount-from" class="converter-input" value="{{ coin_obj.price }}" step="0.00000001">
+              <select id="converter-from" class="converter-select">
+                <option value="USD" selected>USD</option>
+                <option value="BTC" >BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="BNB">BNB</option>
+                <option value="SOL">SOL</option>
+              </select>
+            </div>
+            <button class="converter-swap-btn" id="converter-swap">⇄</button>
+            <div class="converter-amount">
+              <input type="number" id="converter-amount-to" class="converter-input" readonly>
+              <select id="converter-to" class="converter-select">
+                <option value="USD">USD</option>
+                <option value="BTC" selected>BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="BNB">BNB</option>
+                <option value="SOL">SOL</option>
+              </select>
+            </div>
+          </div>
+          <div class="converter-result">
+            <div class="converter-rate" id="converter-rate"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>

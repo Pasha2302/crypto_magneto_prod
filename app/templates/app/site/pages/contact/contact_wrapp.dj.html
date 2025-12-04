@@ -1,0 +1,113 @@
+{% extends 'app/site/base.html' %}
+{% load static %}
+
+
+{% block title %}
+  Contact Us - CryptoMagneto
+{% endblock %}
+
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block content %}
+  <!-- Main Content -->
+  <main class="container">
+    <section class="contact-section">
+      <div class="contact-header">
+        <h1 class="contact-title">Contact Us</h1>
+        <p class="contact-subtitle">Get in touch with us for token listings, partnerships, or general inquiries.</p>
+      </div>
+
+      <!-- Contact Info Cards and Form in Two Columns -->
+      <div class="contact-two-columns">
+        <!-- Left Column: Contact Info Cards -->
+        <div class="contact-info-cards-column">
+          <div class="contact-info-card">
+            <div class="contact-info-icon">✉</div>
+            <h3 class="contact-info-title">Email Support</h3>
+            <p class="contact-info-description">Send us an email and we'll get back to you within 24 hours</p>
+            <a href="mailto:support@cryptomagneto.com" class="contact-info-link">support@cryptomagneto.com</a>
+          </div>
+          <div class="contact-info-card">
+            <div class="contact-info-icon">⚡</div>
+            <h3 class="contact-info-title">Quick Response</h3>
+            <p class="contact-info-description">Average response time is less than 12 hours during business days</p>
+            <span class="contact-info-stat">12h avg response</span>
+          </div>
+          <div class="contact-info-card">
+            <div class="contact-info-icon">🌐</div>
+            <h3 class="contact-info-title">Global Support</h3>
+            <p class="contact-info-description">We're available 24/7 to assist you with any questions or concerns</p>
+            <span class="contact-info-stat">24/7 Available</span>
+          </div>
+        </div>
+
+        <!-- Right Column: General Contact Form -->
+        <div class="contact-forms-column">
+          <div class="contact-form-card">
+            <div class="form-card-header">
+              <h2 class="form-card-title">General Contact</h2>
+              <p class="form-card-description">Have questions or need assistance? Reach out to us using the form below.</p>
+            </div>
+            <form id="contact-form" class="contact-form">
+              <div class="form-group">
+                <label class="form-label" for="contact-name">Name *</label>
+                <input type="text" id="contact-name" class="form-input" name="contact-name" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-email">Email *</label>
+                <input type="email" id="contact-email" class="form-input" name="contact-email" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-subject">Subject *</label>
+                <input type="text" id="contact-subject" class="form-input" name="contact-subject" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="contact-message">Message *</label>
+                <textarea id="contact-message" class="form-textarea" name="contact-message" rows="5" required></textarea>
+              </div>
+              <button type="submit" class="btn-submit-form">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Contact Methods -->
+      <div class="contact-methods">
+        <div class="contact-methods-content">
+          <div class="contact-methods-text">
+            <h2 class="contact-methods-title">Other Ways to Reach Us</h2>
+            <p class="contact-methods-description">
+              Prefer other communication channels? Connect with us through our social media platforms or join our community.
+            </p>
+          </div>
+          <div class="contact-methods-links">
+            <a href="#" class="contact-method-link">
+              <span class="contact-method-icon">✈</span>
+              <span class="contact-method-text">Telegram</span>
+            </a>
+            <a href="#" class="contact-method-link">
+              <span class="contact-method-icon">🐦</span>
+              <span class="contact-method-text">Twitter</span>
+            </a>
+            <a href="#" class="contact-method-link">
+              <span class="contact-method-icon">🎮</span>
+              <span class="contact-method-text">Discord</span>
+            </a>
+            <a href="#" class="contact-method-link">
+              <span class="contact-method-icon">📱</span>
+              <span class="contact-method-text">Support Channel</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+
+
+{% block extra_js %}
+{% endblock %}
+

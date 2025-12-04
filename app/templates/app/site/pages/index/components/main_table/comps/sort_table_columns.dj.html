@@ -1,0 +1,12 @@
+
+  {% for col in filt_and_sort.table_columns %}
+    <th class="sortable"
+      data-column="{{ col.value }}"
+      data-sort-direction="{{ col.direction }}">
+      {{ col.label }}
+      <span class="sort-arrow">
+        {% if col.direction == "asc" %}↑{% elif col.direction == "desc" %}↓{% endif %}
+      </span>
+    </th>
+  {% endfor %}
+

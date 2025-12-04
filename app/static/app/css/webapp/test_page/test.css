@@ -1,0 +1,143 @@
+.container-default {
+    display: block;
+    max-width: 1200px;
+    /* максимальная ширина контейнера */
+}
+
+
+.container {
+    display: flex;
+    gap: 10px;
+    border: 2px solid black;
+    margin-bottom: 20px;
+}
+
+.box {
+    border: 1px solid blue;
+    padding: 5px;
+    text-align: center;
+    white-space: normal;
+    /* текст может переноситься */
+    word-break: break-word;
+    /* длинные слова будут переноситься */
+}
+
+/* flex: auto */
+.auto {
+    flex: 1 1 auto;
+}
+
+/* flex: 1 1 0 */
+.zero {
+    flex: 1 1 0;
+}
+
+
+/* =========================================== Card and close button styles: =========================================== */
+.test-article {
+    position: relative;
+    max-width: 200px;
+}
+
+.main-content {
+    width: 200px;
+    padding: 20px;
+    border: 5px solid #ccc;
+}
+
+.test-btn {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+
+
+/* ---------------------------------------- Swiper styles: ---------------------------------------- */
+.swiper {
+    width: 400px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    position: relative;
+    margin-top: 10px;
+}
+
+.swiper-track {
+    display: flex; 
+    /* 
+       Контейнер .swiper-track делает элементы (слайды) расположенными в одну строку.
+       flex = "гибкий контейнер", управляет размещением потомков.
+       Без flex элементы могли бы переноситься на новую строку.
+       Здесь важно, чтобы все слайды шли горизонтально подряд.
+    */
+
+    transition: transform 2.1s cubic-bezier(.22, .9, .2, 1);
+    /* 
+       transition — задаёт анимацию при изменении свойства "transform".
+       Формат: transition: <свойство> <длительность> <функция_времени> <задержка>;
+
+       - "transform" — анимируется только изменение transform (например translateX).
+       - "2.45s" — Длительность анимации 2.45 секунды.
+                * Означает: «Когда значение transform изменится,
+                * плавно пройди путь от старого к новому за 2.45 секунды».
+       - "cubic-bezier(.22, .9, .2, 1)" — пользовательская кривая ускорения/замедления.
+
+       cubic-bezier(x1, y1, x2, y2):
+       • x1 и x2 — от 0 до 1 (положение контрольных точек по оси времени).
+       • y1 и y2 — определяют форму ускорения (можно выходить за 0–1 для "перелётов").
+
+       Визуально:
+       - низкие значения x1 → быстрый старт
+       - высокие y2 → сильное замедление в конце
+       - значения >1 создают эффект "выстрела" и возврата
+
+       Пример: cubic-bezier(.22,.9,.2,1) — ускоренный старт и мягкое замедление (похоже на ease-out).
+    */
+    cursor: grab;
+}
+/* ===== Примеры других вариантов transition для понимания ===== */
+
+/* 1. Простая линейная анимация (равномерная скорость):
+    transition: transform 1s linear;
+*/
+
+/* 2. Стандартное "ease" — мягкий старт и мягкая остановка:
+    transition: transform 0.3s ease;
+*/
+
+/* 3. Быстрый старт и замедление к концу (плавный докат):
+    transition: transform 0.5s ease-out;
+*/
+
+/* 4. Медленный старт, ускорение, затем плавный выход:
+    transition: transform 0.5s ease-in-out;
+*/
+
+/* 5. Своя bezier-кривая для "резкого броска":
+    transition: transform 0.45s cubic-bezier(.17, .67, .83, .67);
+*/
+
+/* 6. Анимация с задержкой старта (начнётся через 0.2 секунды):
+    transition: transform 0.5s ease 0.2s;
+*/
+
+/* 7. Несколько анимаций сразу (пример для демонстрации):
+    transition: transform 0.4s ease-out, opacity 0.2s linear;
+    — transform будет меняться 0.4s с плавным замедлением,
+    — opacity — 0.2s с постоянной скоростью.
+*/
+
+
+.swiper-slide {
+    min-width: 400px;
+    height: 200px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    background: #ddd;
+}
+
+.swiper-slide:nth-child(odd) {
+    background: #bbb;
+}

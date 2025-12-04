@@ -1,0 +1,77 @@
+{% extends 'app/site/base.html' %}
+{% load static %}
+{% load compress %}
+
+{% block extra_head %}
+  {% comment %} CSS:  {% endcomment %}
+{% endblock %}
+
+
+{% block content %}
+  {% comment %} Hero Section:   {% endcomment %}
+  {% include 'app/site/pages/index/components/head_text.dj.html' %}
+
+   {% comment %} Main Content:  {% endcomment %}
+  <main class="container">
+
+    {% comment %} Content Cards Section 3 tables  {% endcomment %}
+    {% include 'app/site/pages/index/components/top_tables.dj.html' %}
+
+
+    {% comment %} Promoted Tokens Table:  {% endcomment %}
+    <section class="promoted-coins-section">
+      <div class="promoted-coins-header">
+        <h2 class="promoted-coins-title">Promoted Tokens</h2>
+        <button class="btn-promote-coin" aria-label="Promote your cryptocurrency token">Promote your coin</button>
+      </div>
+      {% comment %} Main Table:  {% endcomment %}
+      <div id="table-promoted-block" style="display: contents;">
+        {% include 'app/site/pages/index/components/main_table/main_table_wrapp.dj.html' with coins=promoted_coins filt_and_sort=filt_and_sort only %}
+      </div>
+    </section>
+
+
+    {% comment %} Coins Main Table  {% endcomment %}
+    <section class="promoted-coins-section">
+
+      <div class="promoted-coins-header">
+        <h2 class="promoted-coins-title">Trending</h2>
+        
+        {% comment %} Show rows: {% endcomment %}
+        <div class="trending-rows-selector-inline">
+          <label for="trending-rows-per-page-top" class="rows-label">Show rows:</label>
+          <select id="trending-rows-per-page-top" class="rows-selector">
+            {% for per_data in pagination_data.per_page_datas %}
+              <option value="{{ per_data.value }}" {{ per_data.active }}>{{ per_data.value }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+      </div>
+
+      {% comment %} Filters Block:  {% endcomment %}
+      {% include 'app/site/pages/index/components/main_table/comps/filters_block.dj.html' %}
+
+      <div id="table-main-block" style="display: contents;">
+        {% comment %} Main Table:  {% endcomment %}
+        {% include 'app/site/pages/index/components/main_table/main_table_wrapp.dj.html' with coins=main_coins filt_and_sort=filt_and_sort pagination_data=pagination_data only %}
+      </div>
+    </section>
+
+
+    {% comment %} Our Partners Section: {% endcomment %}
+    {% include 'app/site/pages/index/components/secondary_comps/partners.dj.html' %}
+
+    {% comment %} Main Text Block Section: {% endcomment %}
+    {% include 'app/site/pages/index/components/secondary_comps/text_block.dj.html' %}
+
+    {% comment %} Subscribe Section:  {% endcomment %}
+    {% include 'app/site/pages/index/components/secondary_comps/subscribe.dj.html' %}
+  </main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+  {% comment %} <script type="module" src="{% static 'app/js/webapp/index_page/index.js' %}"></script> {% endcomment %}
+{% endblock %}

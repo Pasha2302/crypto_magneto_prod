@@ -1,0 +1,75 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}⚙️ Administrator's site {% endblock %}
+
+
+{% block extrastyle %}
+  {{ block.super }}
+{% endblock %}
+
+
+{% block extrahead %}
+  {% if request.resolver_match.url_name != 'login' %}
+    <script>
+      var csrfToken = '{{ csrf_token }}'
+      var headerImgPath = '{{ obj_admin_img.header_admin_page.image.url }}'
+    </script>
+    <link rel="icon" href="{% static 'app/img/admin/favicon.ico' %}" type="image/x-icon"/>
+
+    <link rel="stylesheet" href="{% static 'app/css/admin/base-style.css' %}" />
+    <link rel="stylesheet" href="{% static 'app/css/admin/json_viewer.css' %}">
+  {% endif %}
+{% endblock %}
+
+
+{% block branding %}
+  {% if request.resolver_match.url_name != 'login' %}
+    <!-- имя конечной точки страницы: {{ request.resolver_match.url_name }} -->
+    <button class="header__burger" aria-controls="site-nav" aria-expanded="false">
+      <span></span>
+    </button>
+
+    <div class="header__title">
+      <h1>{{ my_global_data }}<a href="/logginaizerrs/">Django Admin</a></h1>
+      <p id="utc-time"></p>
+    </div>
+    
+    <div id="header__form" class="form-container__wrapp">
+      {% include 'app/admin/widgets/admin_header_form.dj.html' %}
+    </div>
+  {% endif %}
+{% endblock %}
+
+
+{% block footer %}
+  {{ block.super }}
+
+  <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+  <!-- Подключаем стандартный JS Select2 -->
+  <script src="{% static 'admin/js/vendor/select2/select2.full.js' %}"></script>
+  <!-- Подключение CSS Select2 -->
+  <link href="{% static 'admin/css/vendor/select2/select2.css' %}" rel="stylesheet" />
+
+  
+  <script type="module" src="{% static 'app/js/admin/base_scripts/main.js' %}"></script>
+
+  <!-- Блок для отображения json данных: -->
+  <div id="json-container-view"></div>
+
+  <!-- Overlay для видео -->
+  <div id="video-overlay" style="display:none;">
+      <video 
+        controls
+        id="overlay-video" 
+        {% comment %} preload="metadata" {% endcomment %}
+        preload="auto"
+        style="max-width:80%; max-height:80%; border-radius:8px;" >
+      </video>
+
+      <button id="overlay-close" style="
+          position:absolute; top:20px; right:20px; font-size:24px;
+          background:transparent; color:#fff; border:none; cursor:pointer;">✖</button>
+  </div>
+
+{% endblock %}

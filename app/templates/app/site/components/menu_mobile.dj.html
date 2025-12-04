@@ -1,0 +1,47 @@
+{% load static %}
+
+
+<div class="modal fade" id="full-screen-menu" aria-hidden="">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header m-2">
+        <picture>
+          <source
+            srcset="{{ images_obj.main_min.img_64.url }}"
+            media="(max-width: 200px)">
+          <source
+            srcset="{{ images_obj.main.img_140.url }}"
+            media="(max-width: 280px)">
+          <source
+            srcset="{{ images_obj.main.img_240.url }}"
+            media="(max-width: 1921px)">
+
+          <img
+            src="{{ images_obj.main.image.url }}"
+            alt="Whale Alert"
+            fetchpriority="high"
+          />
+        </picture>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" style="font-size: 25px;"></button>
+      </div>
+
+      <div class="modal-body">
+        <hr />
+        <span class="btn-login"><a class="btn btn-primary rounded-pill active" href="/login/">Login</a></span>
+        <span class="btn-login btn-login-red"><a class="btn btn-primary rounded-pill" href="/signup/">Sign Up</a></span>
+
+        {% comment %} {% for data_menu in menu_items %}
+          <a href="{% url data_menu.url %}" class="btn btn-primary nav-link rounded-pill {{ data_menu.class }}">
+            <span class="">{{ data_menu.name }}</span>
+          </a>
+        {% endfor %} {% endcomment %}
+
+        {% comment %} <hr />
+        <span class="btn-login"><a class="btn btn-primary rounded-pill active" href="/login/">Login</a></span>
+        <span class="btn-login btn-login-red"><a class="btn btn-primary rounded-pill" href="/signup/">Sign Up</a></span> {% endcomment %}
+      </div>
+
+    </div>
+  </div>
+</div>

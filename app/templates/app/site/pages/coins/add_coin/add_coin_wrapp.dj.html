@@ -1,0 +1,229 @@
+{% extends 'app/site/base.html' %}
+{% load static %}
+
+
+{% block title %}
+  Submit Token - CryptoMagneto
+{% endblock %}
+
+
+{% block extra_head %}
+{% endblock %}
+
+
+{% block content %}
+  <!-- Main Content -->
+  <main class="container">
+    <section class="submit-token-section">
+      <div class="submit-token-header">
+        <h1 class="submit-token-title">Submit Your Token</h1>
+        <p class="submit-token-subtitle">
+          Get your cryptocurrency token listed on CryptoMagneto. 
+          Fill out the form below with accurate information about your project.
+        </p>
+      </div>
+
+      <div class="submit-token-form-card">
+        <div class="error-wrapp-form"><span id="error_name"></span></div>
+        <form 
+          id="submit-token-form" 
+          class="submit-token-form" 
+          action="{% url 'add_coin_view' %}"
+          form method="POST" 
+          enctype="multipart/form-data">
+
+          {% csrf_token %}
+
+          {% comment %} Name AND Symbol: {% endcomment %}
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="token-name">Token Name *</label>
+              <input type="text" id="token-name" class="form-input" name="name" placeholder="e.g., Bitcoin" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="token-ticker">Token Ticker *</label>
+              <input type="text" id="token-ticker" class="form-input" name="symbol" placeholder="e.g., BTC" maxlength="10" required>
+            </div>
+          </div>
+
+          {% comment %} Contract Address AND Chain: {% endcomment %}
+          <div class="error-wrapp-form"><span id="error_contract"></span></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="token-chain">Chain *</label>
+              <select id="token-chain" class="form-select" name="chain" required>
+                <option value="">Select a chain</option>
+                {% for data_chain in used_chains %}
+                  <option data-name="{{ data_chain.name }}" value="{{ data_chain.slug }}">
+                    {{ data_chain.name }} ({{ data_chain.symbol }})
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="contract-address">Smart Contract Address *</label>
+              <input type="text" id="contract-address" class="form-input" name="contract_address" placeholder="0x..." required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="token-description">Token Description *</label>
+            <textarea 
+              id="token-description" 
+              class="form-textarea" 
+              name="full_desc" 
+              rows="6" 
+              placeholder="Describe your token, its use case, features, and any other relevant information..." 
+              required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="launch-date">Launch Date *</label>
+            <div class="date-input-wrapper">
+              <input type="date" id="launch-date" class="form-input date-input" name="launch_date" required>
+              <span class="date-icon">📅</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Token Logo *</label>
+            <div class="file-upload-area" id="logo-upload-area">
+              <input type="file" name="image" id="logo-upload" class="file-upload-input" accept="image/*" required>
+              <div class="file-upload-content">
+                <div class="file-upload-icon">📷</div>
+                <p class="file-upload-text">Drag and drop your logo here, or <span class="file-upload-link">browse</span></p>
+                <p class="file-upload-hint">PNG, JPG, GIF up to 5MB</p>
+              </div>
+              <div class="file-upload-preview" id="logo-preview" style="display: none;">
+                <img id="logo-preview-image" src="" alt="Logo preview">
+                <button type="button" class="file-upload-remove" id="logo-remove">×</button>
+              </div>
+            </div>
+          </div>
+
+          {% include 'app/site/pages/coins/add_coin/components/social_links.dj.html' %}
+
+          <button type="submit" class="btn-submit-token">Submit Token</button>
+        </form>
+      </div>
+    </section>
+  </main>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    // Submit Token Form Functionality
+    (function() {
+      const logoUploadArea = document.getElementById('logo-upload-area');
+      const logoUploadInput = document.getElementById('logo-upload');
+      const logoPreview = document.getElementById('logo-preview');
+      const logoPreviewImage = document.getElementById('logo-preview-image');
+      const logoRemove = document.getElementById('logo-remove');
+      const fileUploadContent = logoUploadArea.querySelector('.file-upload-content');
+      const fileUploadLink = logoUploadArea.querySelector('.file-upload-link');
+
+      // Нажмите, чтобы просмотреть
+      logoUploadArea.addEventListener('click', (e) => {
+        if (e.target !== logoRemove && !logoPreview.contains(e.target)) {
+          logoUploadInput.click();
+        }
+      });
+
+      fileUploadLink.addEventListener('click', (e) => {
+        e.stopPropagation();
+        logoUploadInput.click();
+      });
+
+      // Выбор файла
+      logoUploadInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 5 * 1024 * 1024) {
+            alert('File size must be less than 5MB');
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            logoPreviewImage.src = e.target.result;
+            fileUploadContent.style.display = 'none';
+            logoPreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Перетаскивание
+      logoUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        logoUploadArea.classList.add('dragover');
+      });
+
+      logoUploadArea.addEventListener('dragleave', () => {
+        logoUploadArea.classList.remove('dragover');
+      });
+
+      logoUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        logoUploadArea.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          if (file.size > 5 * 1024 * 1024) {
+            alert('File size must be less than 5MB');
+            return;
+          }
+          logoUploadInput.files = e.dataTransfer.files;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            logoPreviewImage.src = e.target.result;
+            fileUploadContent.style.display = 'none';
+            logoPreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Удалить логотип
+      logoRemove.addEventListener('click', (e) => {
+        e.stopPropagation();
+        logoUploadInput.value = '';
+        logoPreview.style.display = 'none';
+        fileUploadContent.style.display = 'block';
+      });
+
+      // Ввод даты — отображение календаря при щелчке в любом месте поля
+      const launchDateInput = document.getElementById('launch-date');
+      const dateInputWrapper = document.querySelector('.date-input-wrapper');
+      
+      // Щелкните в любом месте оболочки, чтобы открыть календарь.
+      dateInputWrapper.addEventListener('click', (e) => {
+        if (e.target !== launchDateInput && e.target.className !== 'date-icon') {
+          e.preventDefault();
+          launchDateInput.focus();
+          if (launchDateInput.showPicker) {
+            launchDateInput.showPicker();
+          } else {
+            launchDateInput.click();
+          }
+        }
+      });
+
+      // Также убедитесь, что нажатие на поле ввода открывает календарь.
+      launchDateInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (launchDateInput.showPicker) {
+          launchDateInput.showPicker();
+        }
+      });
+
+      launchDateInput.addEventListener('focus', () => {
+        if (launchDateInput.showPicker) {
+          launchDateInput.showPicker();
+        }
+      });
+    })();
+  </script>
+{% endblock %}
+

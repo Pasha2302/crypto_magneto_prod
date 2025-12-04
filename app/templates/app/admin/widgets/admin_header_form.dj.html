@@ -1,0 +1,50 @@
+
+<div class="forms-container">
+  <form action="/p-admin/header-form-admin/" method="post" class="activation-block">
+    <p>Get JSON data on prices in telegram.</p>
+
+    <div class="wrapp__input">
+      <input type="checkbox" id="data_dexscreener" name="data_dexscreener" value="1"/>
+      <label for="data_dexscreener">Get API Data from Dexscreener</label>
+    </div>
+
+
+    <div class="wrapp__input">
+      <input type="checkbox" id="no_data_dexscreener" name="no_data_dexscreener" value="1"/>
+      <label for="no_data_dexscreener">Get API No Data from Dexscreener</label>
+    </div>
+
+    <div class="wrapp__input">
+      <input type="checkbox" id="data_mobula" name="data_mobula" value="1"/>
+      <label for="data_mobula">Get API Data from Mobula</label>
+    </div>
+
+    <div class="wrapp__input">
+      <input type="checkbox" id="no_data_mobula" name="no_data_mobula" value="1"/>
+      <label for="no_data_mobula">Get API No Data from Mobula</label>
+    </div>
+
+    <p id="response-form-api-price"></p>
+    <button class="btnforheader" type="button" id="get_api_data_price_form_submit">Activate</button>
+  </form>
+
+
+  <div class="activation-block check-price-updates">
+    <p>Check the activity of coins (receiving a new price) within 7 days</p>
+    <p id="response"></p>
+    <button class="btnforheader" type="button" id="check_price_updates">Activate</button>
+  </div>
+
+  <div class="activation-block backup-db-block">
+    <p>Get a backup file to restore the database</p>
+    <p id="response-backup-db"></p>
+    <button class="btnforheader" type="button" id="btn-backup-db">Activate</button>
+  </div>
+
+  <div class="activation-block backup-db-block">
+    <p>Clear server cache to display new data on the site</p>
+    <p id="response-clear-cache"></p>
+    <button class="btnforheader" type="button" id="btn-clear-cache">Activate</button>
+  </div>
+
+</div>

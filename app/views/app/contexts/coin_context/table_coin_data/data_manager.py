@@ -1,9 +1,21 @@
-from pprint import pprint
+from datetime import timedelta
+from typing import Any
+
+import logfire
+
+from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Prefetch, QuerySet, Case, When, Value, IntegerField
 from django.db import connection, reset_queries
 
 from app.db_models import Coin, Label
+from app.views.app.contexts.coin_context.table_coin_data.queries.queries_coin_table import (
+    TableCoinQueryParams, SortField
+)
+
+from django.core.cache import cache
+
+from app.views.app.contexts.coin_context.tools import get_used_chains
 
 
 class CoinDataManager:
@@ -20,36 +32,39 @@ class CoinDataManager:
        - Также оптимизировано через select_related и prefetch_related.
 
     3. Вспомогательные методы:
-       - print_coin: выводит информацию о монетах и их метках в консоль.
+       - log_coin_data: выводит информацию о монетах и их метках в консоль.
        - _create_pagination_data: возвращает словарь с данными для пагинации.
        - __debug_sql: выводит все SQL-запросы, выполненные в текущей сессии Django ORM.
 
     Особенности реализации:
     - select_related + only ограничивает поля основной и связанных моделей, улучшая производительность JOIN.
     - Prefetch используется для связанных меток, чтобы минимизировать количество запросов к БД.
-    - Пагинация реализована через django.core.paginator.Paginator с параметрами по умолчанию: 50 элементов на страницу.
+    - Пагинация реализована через django.core.paginator. Paginator с параметрами по умолчанию: 50 элементов на страницу.
     - Методы построены так, чтобы можно было отдельно получать промо-коины и
         обычные опубликованные монеты, не влияя друг на друга.
     """
 
-    def __init__(self, client_params_table_filter):
-        self.client_params_table_filter = client_params_table_filter
+    def __init__(self, client_params_table_filter: TableCoinQueryParams):
+        self.client_params = client_params_table_filter
 
     @staticmethod
     def __debug_sql():
-        print("\n SQL:\n")
-        for q in connection.queries:
-            print(q['sql'])
-            print('==' * 50)
+
+        for sql in connection.queries:
+            logfire.info(
+                "[Page Index] SQL Coin Tables",
+                sql=sql.get("sql"),
+                time=sql.get("time"),
+            )
 
     @staticmethod
-    def print_coin(coins_obj: list[Coin]):
+    def log_coin_data(coins_obj: list[Coin]):
         for coin_obj in coins_obj:
             labels_coin = None
             if hasattr(coin_obj, 'labels_coin'):
                 labels_coin = [{"name": label.name, "slug": label.slug} for label in coin_obj.labels_coin if label]
 
-            print(
+            logfire.info(
                 f"Name: {coin_obj.name}\n"
                 f"Symbol: {coin_obj.symbol}\n"
                 f"Contract Address: {coin_obj.contract_address}\n"
@@ -57,7 +72,6 @@ class CoinDataManager:
                 f"Price: {coin_obj.price}\n"
                 f"Labels Coin: {labels_coin}\n"
             )
-            print("==" * 60)
 
     @staticmethod
     def _create_pagination_data(qs: QuerySet, per_page, current_page_number):
@@ -72,11 +86,12 @@ class CoinDataManager:
             "current_page": page_obj.number,
             "total_pages": paginator_obj.num_pages,
             "page_range": list(
-                # paginator_obj.get_elided_page_range(number=page_obj.number, on_each_side=2, on_ends=1)
-                paginator_obj.get_elided_page_range(number=page_obj.number)
+                paginator_obj.get_elided_page_range(number=page_obj.number, on_each_side=2, on_ends=1)
             ),
             "total_items": paginator_obj.count,
             "per_page": per_page,
+            "items_start_index": page_obj.start_index(),
+            "items_end_index": page_obj.end_index(),
         }, page_obj
 
     @staticmethod
@@ -95,9 +110,9 @@ class CoinDataManager:
             .only(
                 'id', 'chain_id',
 
-                'name', 'symbol', 'contract_address', 'price', 'format_price', 'price_change_24h',
-                'market_cap', 'volume_usd', 'volume_btc',
-
+                'slug', 'name', 'symbol', 'contract_address', 'image',
+                'price', 'format_price', 'price_change_24h',
+                'market_cap', 'market_cap_presale', 'volume_usd', 'volume_btc', 'published_at',
 
                 'chain__name', 'chain__symbol', 'chain__image',
             )
@@ -113,8 +128,9 @@ class CoinDataManager:
         return qs.prefetch_related(label_prefetch)
 
     @staticmethod
-    def __sorting_coins(qs: QuerySet, sort_option: str, sort: str):
-        order_prefix = '-' if sort == 'DESC' else ''
+    def __sorting_coins(qs: QuerySet, sort_option: str = 'price', sort: str = 'desc'):
+
+        order_prefix = '-' if sort == 'desc' else ''
         # Сортировка при None-значениях
         if sort_option in {'market_cap', 'price', 'volume_usd', 'price_change_24h', 'launch_date'}:
             qs = qs.annotate(
@@ -130,7 +146,91 @@ class CoinDataManager:
 
         return qs
 
+    @staticmethod
+    def __filter_coins(qs: QuerySet, new, presale, doxxed, audited, chain_slug: str) -> QuerySet:
+        if not any([new, presale, doxxed, audited, chain_slug]): return qs
+
+        logfire.info(
+            "Datas Filter:",
+            new=new,
+            presale=presale,
+            doxxed=doxxed,
+            audited=audited,
+            chain_slug=chain_slug,
+        )
+
+        if new:
+            f_date = timezone.now() - timedelta(days=3)
+            qs = qs.filter(published_at__gte=f_date)
+
+        if presale: qs = qs.filter(market_cap_presale=True)
+        if doxxed: qs = qs.filter(labels__name="Doxxed")
+        if audited: qs = qs.filter(labels__name="Audited")
+
+        # Если у монеты есть обе записи labels (Doxxed, Audited) может быть дубликат в данных qs
+        # По этому используем qs.distinct() для удаления дубликатов монет.
+        if doxxed or audited: qs = qs.distinct()
+
+        if chain_slug: qs = qs.filter(chain__slug=chain_slug)
+
+        return qs
+
+    # ========================================= GET DATA: ======================================================== #
+
+    def get_filter_and_sorted_data_table(self, only_columns=False):
+        cp = self.client_params  # сокращение
+        # Колонки сортировки
+        columns = [
+            {
+                "value": f.value,
+                "label": f.name.replace("_", " ").title(),
+                "active": (cp.sort_field == f),
+                "direction": cp.sort_direction.value if cp.sort_field == f else None,
+            }
+            for f in SortField
+        ]
+        if only_columns: return {"table_columns": columns}
+
+        # Фильтры
+        filters = [
+            {
+                "name": name,
+                "label": name.title(),
+                "value": value,
+            }
+            for name, value in cp.filter_options.model_dump().items()
+        ]
+
+        data_filter = {
+            "table_columns": columns,
+            "table_filters": filters,
+            "used_chains": get_used_chains(),
+        }
+        return data_filter
+
+    def get_per_page_datas(self) -> list[dict[str, Any]]:
+        ds = [
+            {"value": 10, "active": "selected"},
+            {"value": 25, "active": ""},
+            {"value": 50, "active": ""},
+            {"value": 100, "active": ""},
+        ]
+        if self.client_params.per_page in {10, 25, 50, 100}:
+            for d in ds:
+                if self.client_params.per_page == d["value"]: d["active"] = "selected"
+                else: d["active"] = ""
+
+        return ds
+
     def get_coins_tops_tables(self):
+        cache_key = "coins_tops_tables"
+        cache_ttl = 600  # время жизни кеша в секундах (например, 10 минут)
+        # Попытка получить из кеша
+        cached_result = cache.get(cache_key)
+        if cached_result is not None:
+            logfire.info("Кэш-попадание для coins_tops_tables")
+            return cached_result
+
         qs_top_gainers = (
             Coin.objects.filter(is_published=True)
             .filter(price_change_24h__gt=0)
@@ -150,42 +250,80 @@ class CoinDataManager:
             .order_by('-views')[:5]
         )
 
-        return {
+        result = {
             'trending': list(self.__build_query_select_related(qs_trending)),
             'most_viewed': list(self.__build_query_select_related(qs_most_viewed)),
             'top_gainers': list(self.__build_query_select_related(qs_top_gainers)),
         }
 
+        # Сохраняем результат в кеш
+        cache.set(cache_key, result, cache_ttl)
+        logfire.info("Кэш установлен для coins_tops_tables", ttl=cache_ttl)
+
+        return result
+
     def get_promoted_coins(self):
+        sort_field = self.client_params.sort_field.value
+        sort_direction = self.client_params.sort_direction.value
+        cache_key = f"coins_promoted_tables_{sort_field}_{sort_direction}"
+        cache_ttl = 600  # время жизни кеша в секундах (например, 10 минут)
+        # Попытка получить из кеша
+        cached_result = cache.get(cache_key)
+        if cached_result is not None:
+            logfire.info("Кэш-попадание для coins_promoted_tables")
+            return cached_result
+
         qs_coins_prom = Coin.objects.filter(promoted__isnull=False)
         qs_coins_prom = self.__build_query_select_related(qs=qs_coins_prom)
         qs_coins_prom = self.__build_query_label_prefetch_related(qs=qs_coins_prom)
+        qs_coins_prom = self.__sorting_coins(
+            qs=qs_coins_prom,
+            sort_option=sort_field,
+            sort=sort_direction
+        )
+
+        # Сохраняем результат в кеш
+        cache.set(cache_key, qs_coins_prom, cache_ttl)
+        logfire.info("Кэш установлен для coins_promoted_tables", ttl=cache_ttl)
+
         return qs_coins_prom
 
-    def get_published_coins(self) -> QuerySet:
+    def get_published_coins(self) -> tuple[QuerySet, dict[str, Any]]:
         qs_coins = Coin.objects.filter(is_published=True)
         qs_coins = self.__build_query_select_related(qs=qs_coins)
-        qs_coins = self.__sorting_coins(qs=qs_coins, sort_option='price', sort='DESC')
 
-        pagination_data, page_obj = self._create_pagination_data(qs_coins, self.per_page, self.current_page_number)
+        qs_coins = self.__filter_coins(
+            qs=qs_coins,
+            **self.client_params.filter_options.model_dump(),
+            chain_slug=self.client_params.chain_slug
+        )
+        qs_coins = self.__sorting_coins(
+            qs=qs_coins,
+            sort_option=self.client_params.sort_field.value,
+            sort=self.client_params.sort_direction.value
+        )
+
+        pagination_data, page_obj = self._create_pagination_data(
+            qs=qs_coins,
+            per_page=self.client_params.per_page,
+            current_page_number=self.client_params.page_num
+        )
         qs_coins_page = page_obj.object_list
         # Делаем prefetch после пагинации для оптимизации запроса:
         qs_coins = self.__build_query_label_prefetch_related(qs=qs_coins_page)
 
-        print("All Count Coins:\n")
-        pprint(pagination_data)
-        print("==" * 60)
-
-        return qs_coins
+        return qs_coins, pagination_data
 
     def test_orm(self):
         reset_queries()
 
-        qs_published = self.get_published_coins()
+        qs_published, pagination_data = self.get_published_coins()
         qs__promoted = self.get_promoted_coins()
         top_tables = self.get_coins_tops_tables()
 
+
         data = {
+            "pagination_data": pagination_data,
             "main_coins": list(qs_published),
             "promoted_coins": list(qs__promoted),
             "top_tables": top_tables

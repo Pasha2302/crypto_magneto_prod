@@ -1,0 +1,95 @@
+
+  <div class="content-cards">
+    
+    {% comment %} Trending Card  {% endcomment %}
+    <div class="content-card">
+
+      <div class="card-header card-trending">
+        <span class="card-icon" aria-hidden="true">🔥</span>
+        <h3 class="card-title">Trending</h3>
+      </div>
+
+      <div class="card-content">
+        {% for coin_dt in top_tables.trending %}
+          <div class="crypto-item">
+            <span class="crypto-rank">1</span>
+            <img class="coin-logo-small" src="{{ coin_dt.image.url }}" alt="Image coin name {{coin_dt.name}}" loading="lazy">
+            <div class="crypto-info">
+              <a href="{% url 'coin_page_view' coin_dt.chain.symbol coin_dt.slug %}" class="coin-hidden-link"></a>
+              <div class="crypto-name">{{ coin_dt.name }}</div>
+              <div class="crypto-symbol">{{ coin_dt.symbol }}</div>
+            </div>
+
+            {% if coin_dt.price_change_24h >= 0 %}
+              <div class="crypto-change positive">+{{ coin_dt.price_change_24h }}% ↑</div>
+            {% else %}
+              <div class="crypto-change negative">{{ coin_dt.price_change_24h }}% ↓</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="card-footer">
+        <a href="#" class="more-link">More →</a>
+      </div>
+    </div>
+
+
+    <!-- Most Viewed Card -->
+    <div class="content-card">
+
+      <div class="card-header card-viewed">
+        <span class="card-icon" aria-hidden="true">👁️</span>
+        <h3 class="card-title">Most Viewed</h3>
+      </div>
+
+      <div class="card-content">
+        {% for coin_dm in top_tables.most_viewed %}
+          <div class="crypto-item">
+            <span class="crypto-rank">1</span>
+            <img class="coin-logo-small" src="{{ coin_dm.image.url }}" alt="Image coin name {{ coin_dm.name }}" loading="lazy">
+            <div class="crypto-info">
+              <a href="{% url 'coin_page_view' coin_dm.chain.symbol coin_dm.slug %}" class="coin-hidden-link"></a>
+              <div class="crypto-name">{{ coin_dm.name }}</div>
+              <div class="crypto-symbol">{{ coin_dm.symbol }}</div>
+            </div>
+            <div class="crypto-price">${{ coin_dm.format_price }}</div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="card-footer">
+        <a href="#" class="more-link">More →</a>
+      </div>
+    </div>
+
+
+    <!-- Top Gainers Card -->
+    <div class="content-card">
+      <div class="card-header card-gainers">
+        <span class="card-icon" aria-hidden="true">🚀</span>
+        <h3 class="card-title">Top Gainers</h3>
+      </div>
+
+      <div class="card-content">
+        {% for coin_dg in top_tables.top_gainers %}
+          <div class="crypto-item">
+            <span class="crypto-rank">1</span>
+            <img class="coin-logo-small" src="{{ coin_dg.image.url }}" alt="Image coin name {{ coin_dg.name }}" loading="lazy">
+            <div class="crypto-info">
+              <a href="{% url 'coin_page_view' coin_dg.chain.symbol coin_dg.slug %}" class="coin-hidden-link"></a>
+              <div class="crypto-name">{{ coin_dg.name }}</div>
+              <div class="crypto-symbol">{{ coin_dg.symbol }}</div>
+            </div>
+            <div class="crypto-price">${{ coin_dg.format_price }}</div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="card-footer">
+        <a href="#" class="more-link">More →</a>
+      </div>
+    </div>
+
+
+  </div>

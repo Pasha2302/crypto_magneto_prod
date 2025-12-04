@@ -1,0 +1,275 @@
+:root {
+  --header-form-bg: #192a40ba;
+  --border-bg: #717146;
+  --border-bg2: #202423;
+}
+
+body {
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+}
+
+body.loaded {
+    opacity: 1;
+}
+
+
+form .aligned select option:checked {
+    background-color: #4ad1c8 !important;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* ===================================== Стили для заглавной формы управления ============================================== */
+
+#header {
+    flex-direction: column;
+}
+
+#utc-time {
+    font-weight: bold;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: center;
+}
+
+/* ---  BURGER: ---  */
+.header__burger {
+    background: none;
+    border: none;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    padding-bottom: 20px;
+    position: relative;       /* важно для ::before / ::after */
+    transition: transform 0.2s ease;  /* плавное увеличение */
+}
+
+.header__burger::before,
+.header__burger::after,
+.header__burger span {
+    content: "";
+    display: block;
+    height: 3.1px;
+    width: 24px;
+    background: #f2e637;
+    position: absolute;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+.header__burger::after {
+    transform: translateY(7px);
+}
+
+.header__burger::before {
+    transform: translateY(-7px);
+}
+
+/* Активные состояния */
+.header__burger.active::after {
+    transform: rotate(-45deg);
+}
+
+.header__burger.active::before {
+    transform: rotate(45deg);
+}
+
+.header__burger.active span {
+    opacity: 0;
+}
+
+/* Наведение */
+.header__burger:hover {
+    background: none;
+    cursor: pointer;
+    transform: scale(1.15);   /* увеличиваем бургер */
+}
+/* ------------ */
+.header__title {
+    text-align: center;
+    padding: 10px;
+    background-color: var(--header-form-bg);
+    border: 1px solid var(--border-bg);
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+#branding {
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #586885;
+}
+#branding h1 a {
+    color: #ffffff;
+    display: inline-block;               /* нужно для transform */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+#branding h1 a:hover {
+    color: #e7f042;
+    transform: scale(1.2); /* увеличиваем примерно до 20px */
+}
+
+.form-container__wrapp {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--border-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 1.2s ease,opacity 0.7s ease;
+}
+.form-container__wrapp.active {
+    max-height: 490px; /* или auto, но с ним могут быть проблемы с анимацией */
+    opacity: 1;
+    /* появится скролл, если контент больше */
+    overflow-y: auto;
+}
+
+/*-----------------------------------------------*/
+.forms-container {
+    display: grid;
+    width: 60%;
+    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: #16182cba;
+}
+.activation-block {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--header-form-bg);
+    border: 1px solid var(--border-bg2);
+    border-radius: 10px;
+    padding: 15px;
+    gap: 10px;
+}
+form.activation-block {
+    grid-row-start: 1;
+    grid-row-end: 3;
+}
+.form-container__wrapp label {
+    color: var(--header-color);
+}
+button.btnforheader {
+    padding: 10px;
+    background-color: #5c7785;
+    transition: background-color 0.5s ease;
+    margin-top: auto;  /* прижимаем кнопку к низу блока */
+}
+button.btnforheader:hover {
+    background-color: #218838;
+}
+
+/*-----------------------------------------------*/
+#response {
+    color: #e00e0e;
+}
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .forms-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+
+/* ================================  Стили для показа изображений: ========================================================== */
+
+.field-display_image img,
+.admin-img-block {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.field-display_image img,
+.admin-img-block:hover {
+    transform: scale(1.05); /* немного увеличиваем картинку при наведении */
+}
+
+
+.image-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.image-overlay-content {
+    position: relative;
+    max-width: 60%;
+    max-height: 65%;
+}
+
+.overlay-img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.overlay-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+
+/* ================================  Стили для видео плеера: ========================================================== */
+#video-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px); /* размываем фон */
+}
+
+
+/* ================================  Стили для предзашруженного изображения: ============================================= */
+.custom-img-form {
+    width: 120px;
+    height: auto;
+    max-width: 300px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    padding: 5px;
+    margin-top: 10px;
+    transition: all 0.4s ease;
+}
+.custom-img-form:hover {
+    width: 300px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

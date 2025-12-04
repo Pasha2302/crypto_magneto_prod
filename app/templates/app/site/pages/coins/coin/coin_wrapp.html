@@ -1,0 +1,53 @@
+{% extends 'app/site/base.html' %}
+{% load static %}
+
+
+{% block title %}{% endblock %}
+
+{% block extra_head %}{% endblock %}
+
+
+{% block content %}
+  <main class="container">
+    {% comment %} Token Header with Price: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/header_section.dj.html' %}
+
+    {% comment %} Price Block with Chart: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/price_section.dj.html' %}
+
+    {% comment %} About Token: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/about_token.dj.html' %}
+
+    {% comment %} Team & Roadmap Section: {% endcomment %}
+    <div class="team-roadmap-wrapper">
+      {% comment %} Roadmap Section (Left): {% endcomment %}
+      {% include 'app/site/pages/coins/coin/components/team_roadmap.dj.html' %}
+
+      {% comment %} Team Section (Right): {% endcomment %}
+      {% include 'app/site/pages/coins/coin/components/team_section.dj.html' %}
+    </div>
+
+    {% comment %} Tokenomics & Supply: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/tokenomics_section.dj.html' %}
+
+    {% comment %} Token Safety & Audit: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/safety_section.dj.html' %}
+
+    <!-- Where to Buy & Coin Converter -->
+    {% include 'app/site/pages/coins/coin/components/converter.dj.html' %}
+
+    <!-- Price Predictions -->
+    {% include 'app/site/pages/coins/coin/components/token-predictions.dj.html' %}
+
+    {% comment %} FAQ: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/faq-section.dj.html' %}
+
+    {% comment %} More Tokens: {% endcomment %}
+    {% include 'app/site/pages/coins/coin/components/more_tokens_section.dj.html' %}
+  </main>
+{% endblock %}
+
+
+
+{% block extra_js %}
+{% endblock %}

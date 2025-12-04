@@ -1,0 +1,19 @@
+
+
+  <div class="form-group">
+    <label class="form-label">Social Links</label>
+    <div class="social-links-group">
+
+      {% for soc in socials %}
+        <div class="social-link-item">
+          <label class="social-link-label" for="website">
+            <img src="{{ soc.img }}" class="social-img" alt="Image {{ soc.name }}">
+            {{ soc.name }}
+          </label>
+          <input type="url" id="{{ soc.slug }}" class="form-input" name="social_{{ soc.slug }}" placeholder="https://...">
+          <div class="error-wrapp-form"><span id="error_{{ soc.slug }}"></span></div>
+        </div>
+      {% endfor %}
+
+    </div>
+  </div>

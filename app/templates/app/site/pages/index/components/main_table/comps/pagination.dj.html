@@ -1,0 +1,56 @@
+
+
+  <div class="table-controls-bottom">
+
+    <div class="table-pagination-info">
+      <span class="pagination-info-text">
+        Showing {{ pagination_data.items_start_index }} - {{ pagination_data.items_end_index }} out of {{ pagination_data.total_items }}
+      </span>
+    </div>
+
+    <div class="promoted-pagination"
+      data-current-page="{{ pagination_data.current_page }}"
+      data-total-pages="{{ pagination_data.total_pages }}"
+      data-has-next="{{ pagination_data.has_next }}"
+      data-has-previous="{{ pagination_data.has_previous }}"
+      data-per-page="{{ pagination_data.per_page }}">
+
+      <!-- Previous -->
+      <button class="pagination-btn pagination-prev" aria-label="Previous"
+              {% if not pagination_data.has_previous %}disabled{% endif %}
+              data-page="{{ pagination_data.previous_page_number }}">
+        <span class="pagination-icon">←</span>
+        <span class="pagination-text">Previous</span>
+      </button>
+
+      <!-- Номера страниц -->
+      {% for page in pagination_data.page_range %}
+        {% if page == "…" %}
+          <span class="pagination-ellipsis">…</span>
+        {% else %}
+          <button class="pagination-btn {% if page == pagination_data.current_page %}active{% endif %}" 
+                  data-page="{{ page }}">{{ page }}</button>
+        {% endif %}
+      {% endfor %}
+
+      <!-- Next -->
+      <button class="pagination-btn pagination-next" aria-label="Next"
+              {% if not pagination_data.has_next %}disabled{% endif %}
+              data-page="{{ pagination_data.next_page_number }}">
+        <span class="pagination-text">Next</span>
+        <span class="pagination-icon">→</span>
+      </button>
+    </div>
+
+    {% comment %} Show rows: {% endcomment %}
+    <div class="trending-rows-selector-inline">
+      <label for="trending-rows-per-page-bottom" class="rows-label">Show rows:</label>
+      <select id="trending-rows-per-page-bottom" class="rows-selector">
+        {% for per_data in pagination_data.per_page_datas %}
+          <option value="{{ per_data.value }}" {{ per_data.active }}>{{ per_data.value }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+    {% comment %} {{ pagination_data|json_script:"pagination-data" }} {% endcomment %}
+  </div>

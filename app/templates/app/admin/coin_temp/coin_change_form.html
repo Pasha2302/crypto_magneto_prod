@@ -1,0 +1,11 @@
+{% extends 'app/admin/base_change.html' %}
+{% load static %}
+
+
+{% block footer %}
+{{ block.super }}
+
+  {% comment %} <script type="module" src="{% static 'app/js/admin/change_form/actress/main.js' %}"></script> {% endcomment %}
+
+{% endblock %}
+

@@ -1,0 +1,14 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'app/css/admin/change_form/change-form-base-style.css' %}" />
+{% endblock %}
+
+
+{% block footer %}
+{{ block.super }}
+    <script src="{% static 'app/js/admin/change_form/tools.js' %}"></script>
+{% endblock %}

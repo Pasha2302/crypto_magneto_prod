@@ -1,0 +1,25 @@
+{% extends 'app/site/base.html' %}
+{% load static %}
+
+
+{% block title %}
+  !!!
+{% endblock %}
+
+
+{% block extra_head %}
+  <link rel="stylesheet" href="{% static 'app/css/webapp/test_page/test.css' %}">
+{% endblock %}
+
+
+{% block content %}
+  {% include 'app/site/test_page/test.dj.html' %}
+{% endblock %}
+
+
+
+{% block extra_js %}
+  <script src="{% static 'app/js/webapp/test.js' %}"></script>
+
+  
+{% endblock %}

@@ -1,0 +1,1 @@
+from .video_and_image import register_file_cleanup

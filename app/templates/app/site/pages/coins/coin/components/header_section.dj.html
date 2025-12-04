@@ -1,0 +1,80 @@
+
+
+  <section class="token-header-section">
+    <div class="token-header-card">
+      <div class="token-header-main">
+
+        <div class="token-header-left">
+          <div class="token-logo-wrapper">
+            {% if coin_obj.image %}
+              <img class="token-logo" src="{{ coin_obj.image.url }}" alt="Image coin {{ coin_obj.name }}">
+            {% else %}
+              <img src="/media/default_placeholder.webp" class="token-logo" alt="No Image" aria-label="No Image">
+            {% endif %}
+          </div>
+
+          <div class="token-header-info">
+            <h2 class="token-title">
+              {{ coin_obj.name }}
+              <span class="status-tag status-tag-green">{{ coin_obj.symbol }}</span>
+            </h2>
+
+            {% if coin_obj.format_price %}
+              <div class="format-price">
+                {{ coin_obj.format_price }}
+              </div>
+            {% else %}
+              <div class="token-price-large">—</div>
+            {% endif %}
+
+            <div class="token-price-changes-header">
+              {% include 'app/site/pages/coins/coin/components/comps/price_change_comp.dj.html' with price_change=coin_obj.price_change_1h only %}
+              <span class="price-change-separator">|</span>
+              {% include 'app/site/pages/coins/coin/components/comps/price_change_comp.dj.html' with price_change=coin_obj.price_change_24h only %}
+            </div>
+          </div>
+
+        </div>
+
+        <div class="token-header-right">
+          <div class="token-detail-item">
+            <span class="detail-icon">📅</span>
+            <span class="detail-label">Launch Date</span>
+            <span class="detail-value">{{ coin_obj.launch_date }}</span>
+          </div>
+
+          <div class="token-detail-item">
+            <span class="detail-icon">◆</span>
+            <span class="detail-label">{{ coin_obj.chain.name }}</span>
+            <span class="detail-value contract-detail">
+              <span class="contract-text">{{ coin_obj.contract_address|truncatechars:18 }}
+                <div class="tooltip">Copied!</div>
+              </span>
+              <button class="copy-btn-header" aria-label="Copy address" data-address="{{ coin_obj.contract_address }}">📋</button>
+              <a href="{{ coin_obj.explorer_url_f }}" class="contract-link" target="_blank" rel="nofollow noopener">
+                {{ coin_obj.chain.explorer.name }}
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="token-project-links-full">
+        {% for social in  coin_obj.socials_qs %}
+          <a 
+            href="{{ social.url }}" 
+            class="project-link-header" 
+            aria-label="{{ social.name|capfirst }}" 
+            title="link {{ social.name|capfirst }}" 
+            target="_blank" 
+            rel="nofollow noopener">
+            {% comment %} <span class="link-icon">🌐</span> {% endcomment %}
+            <img src="{{ social.image.img_64.url }}" class="social-img" alt="Image {{ social.name }}">
+            <span class="link-text">{{ social.name|capfirst }}</span>
+          </a>
+        {% endfor %}
+      </div>
+
+    </div>
+  </section>

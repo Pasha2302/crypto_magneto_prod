@@ -1,0 +1,74 @@
+
+
+  <div 
+      id="contact-modal" 
+      class="modal fade" 
+      tabindex="-1" 
+      aria-labelledby="contact-modalLabel" 
+      aria-modal="true" 
+      role="dialog">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 578px;">
+      <div class="modal-content pricing-background">
+
+        <div class="modal-header ps-4">
+          <h4 class="modal-title ms-0 mt-1" id="contact-modalLabel">Contact Us</h4>
+          <button type="button" class="btn-close me-2" data-bs-dismiss="modal" aria-hidden="true"></button>
+        </div>
+
+        <div class="modal-body pt-0">
+          <div class="row mb-1">
+            <div>
+
+              <form id="contact-us" class="validate-form" method="post">
+                <div class="form-contact">
+                  <p>
+                    If you have any questions, want to submit an article or would like to reach out to us about any related topics, 
+                    please feel free to send us a message using the contact form below.
+                  </p>
+
+                  <div id="contact-form-messages"></div>
+
+                  <input type="text" id="name" name="name" class="form-control" placeholder="Name*" required="" autocomplete="name" />
+                  <input type="text" id="company" name="company" class="form-control" placeholder="Company" autocomplete="off" />
+                  <input type="text" id="email" name="email" class="form-control" placeholder="Email Address*" value="" required="" autocomplete="email" />
+                  <select id="subject" name="subject" class="form-control" required="">
+                    <option value="" disabled="" hidden="" selected="">Select a subject</option>
+                    <option value="General Inquiry">General Inquiry</option>
+                    <option value="Technical Support">Technical Support</option>
+                    <option value="Pricing and Plans">Pricing and Plans</option>
+                    <option value="API Access">API Access</option>
+                    <option value="Bug Report">Bug Report</option>
+                    <option value="Feature Request">Feature Request</option>
+                    <option value="Partnership Opportunities">Partnership Opportunities</option>
+                    <option value="Media and Press">Media and Press</option>
+                    <option value="Other">Other</option>
+                  </select>
+                  <textarea name="message" id="message" cols="30" rows="8" class="form-control" placeholder="Message" required=""></textarea>
+
+                  <div class="text-center btn-contact pt-3 pb-0 float-end">
+                    <button 
+                      id="contact-submit" 
+                      type="submit" 
+                      class="btn btn-primary rounded-pill g-recaptcha" 
+                      data-sitekey="6Lfv15YUAAAAAHAi4G_0v23K4-R7l2z6gywxu8jj" 
+                      data-callback="onSubmit">Send
+                    </button>
+                  </div>
+
+                  <div class="clearfix"></div>
+                  <div class="recaptcha-branding text-center">
+                    This site is protected by reCAPTCHA and the Google 
+                    <a href="https://policies.google.com/privacy">Privacy Policy</a> and 
+                    <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

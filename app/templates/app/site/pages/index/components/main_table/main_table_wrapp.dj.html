@@ -1,0 +1,24 @@
+
+  <div class="promoted-table-container">
+    <table class="promoted-table">
+
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>NAME</th>
+          <th></th>
+          <th>CHAIN</th>
+          {% include 'app/site/pages/index/components/main_table/comps/sort_table_columns.dj.html' %}
+        </tr>
+      </thead>
+      
+      {% include 'app/site/pages/index/components/main_table/comps/tbody_comp.dj.html' %}
+
+    </table>
+  </div>
+
+  {% comment %} Pagination Block: {% endcomment %}
+  {% if pagination_data %}
+    {% include 'app/site/pages/index/components/main_table/comps/pagination.dj.html' %}
+  {% endif %}
+  

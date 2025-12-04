@@ -1,0 +1,129 @@
+{% load static %}
+
+
+<footer class="main-footer">
+  <!-- Footer Header -->
+  <div class="footer-header">
+    <div class="footer-header-content container">
+      <div class="footer-logo">CryptoMagneto</div>
+
+      {% comment %} <div class="footer-social-icons">
+        <a href="#" class="social-icon" aria-label="Telegram"><span>✈</span></a>
+        <a href="#" class="social-icon" aria-label="Twitter"><span>🐦</span></a>
+        <a href="#" class="social-icon" aria-label="Discord"><span>🎮</span></a>
+        <a href="#" class="social-icon" aria-label="YouTube"><span>▶</span></a>
+        <a href="#" class="social-icon" aria-label="TikTok"><span>♪</span></a>
+        <a href="#" class="social-icon" aria-label="Website"><span>🌐</span></a>
+        <a href="#" class="social-icon" aria-label="App"><span>📱</span></a>
+      </div> {% endcomment %}
+
+      <div class="footer-social-icons">
+        <a href="#" class="social-icon" aria-label="Telegram">
+          <svg class="icon"><use xlink:href="#icon-telegram"></use></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="Twitter">
+          <svg class="icon"><use xlink:href="#icon-twitter"></use></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="Discord">
+          <svg class="icon"><use xlink:href="#icon-discord"></use></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="YouTube">
+          <svg class="icon"><use xlink:href="#icon-youtube"></use></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="TikTok">
+          <svg class="icon"><use xlink:href="#icon-tiktok"></use></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="Website">
+          <svg class="icon"><use xlink:href="#icon-web"></use></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="App">
+          <svg class="icon"><use xlink:href="#icon-app"></use></svg>
+        </a>
+      </div>
+
+      <a href="{% url 'contact_page_view' %}" class="footer-cta-btn">Get in touch with us</a>
+    </div>
+  </div>
+
+  <!-- Footer Navigation Links -->
+  <div class="footer-nav">
+    <div class="footer-nav-content container">
+      <div class="footer-nav-column">
+        <h4 class="footer-nav-title">CRYPTO RANKINGS</h4>
+        <ul class="footer-nav-links">
+          <li>
+            <a href="#">List of tokens</a>
+          </li>
+          <li>
+            <a href="#">New Tokens</a>
+          </li>
+          <li>
+            <a href="#">Presale Tokens</a>
+          </li>
+          <li>
+            <a href="#">Doxxed Tokens</a>
+          </li>
+          <li>
+            <a href="#">Audited Tokens</a>
+          </li>
+          <li>
+            <a href="#">All Time Best Tokens</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-nav-column">
+        <h4 class="footer-nav-title">PROMOTION</h4>
+        <ul class="footer-nav-links">
+          <li>
+            <a href="#">Promotion options and prices</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-nav-column">
+        <h4 class="footer-nav-title">ASSETS</h4>
+        <ul class="footer-nav-links">
+          <li>
+            <a href="#">Submit token</a>
+          </li>
+          <li>
+            <a href="#">Request an update</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-nav-column">
+        <h4 class="footer-nav-title">COMPANY</h4>
+        <ul class="footer-nav-links">
+          <li>
+            <a href="#">About us</a>
+          </li>
+          <li>
+            <a href="contact.html">Contact us</a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer-nav-column">
+        <h4 class="footer-nav-title">LEGAL</h4>
+        <ul class="footer-nav-links">
+          <li>
+            <a href="terms.html">Terms & Conditions</a>
+          </li>
+          <li>
+            <a href="privacy.html">Privacy policy</a>
+          </li>
+          <li>
+            <a href="disclaimer.html">Disclaimer</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Bottom Bar -->
+  <div class="footer-bottom-bar">
+    <div class="footer-bottom-content container">
+      <div class="footer-copyright">
+        CryptoMagneto © 2023 - <span id="current-year">2025</span>
+      </div>
+    </div>
+  </div>
+</footer>

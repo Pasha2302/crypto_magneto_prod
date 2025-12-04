@@ -1,14 +1,26 @@
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 
 from app.views.app.contexts.bsae_context import BaseContextManager
+from app.views.app.contexts.coin_context.tools import get_used_chains, get_socials_data
 
 
-def disclaimer_page_view(request: HttpRequest) -> HttpResponse:
-    context = BaseContextManager(request).get()
+class AddCoinContextManager:
+    def __init__(self, request: HttpRequest):
+        self.request = request
+        self.__context = BaseContextManager(request, name_page='add_coin').get()
+
+    def get(self):
+        self.__context['used_chains'] = get_used_chains()
+        self.__context['socials'] = get_socials_data()
+        return self.__context
+
+
+def add_coin_page_view(request: HttpRequest) -> HttpResponse:
+    context = AddCoinContextManager(request).get()
     return render(
         request,
-        template_name='app/site/pages/disclaimer/disclaimer_wrapp.dj.html',
+        template_name='app/site/pages/coins/add_coin/add_coin_wrapp.dj.html',
         context=context,
     )
 

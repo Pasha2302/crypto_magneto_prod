@@ -1,0 +1,66 @@
+# My
+info
+src/settings.py
+media/
+logs
+/static/
+gunicorn.sock
+celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
+start_uvicorn.sh
+stop_uvicorn.sh
+/*.json
+
+
+
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.env
+
+
+# Pytest
+.pytest_cache/
+htmlcov/
+.coverage
+.tox/
+.nox/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and debug output
+*.log
+*.out
+*.err
+
+# FastAPI specific
+instance/
+*.db
+*.sqlite3
+
+# Local testing files
+local.env
+local.settings.json
+
+# Deployment
+*.pem
+*.crt
+*.key
+
+

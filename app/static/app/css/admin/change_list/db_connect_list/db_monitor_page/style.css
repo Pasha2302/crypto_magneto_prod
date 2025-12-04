@@ -1,0 +1,58 @@
+.db-monitor-container {
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.range-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.range-btn {
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: 600;
+}
+
+.range-btn.active {
+    background: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.range-btn:hover {
+    background: #e2e6ea;
+}
+
+.chart-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+    height: 300px;
+}
+
+.chart-box h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #007bff;
+}
+
+.chart-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}

@@ -1,0 +1,139 @@
+{% load static %}
+
+
+<!-- Top Bar (Header - Top Row) -->
+<div class="top-bar">
+  <div class="container">
+    <div class="top-bar-content top-bar-desktop">
+      <div class="top-bar-left">
+        <span>Cryptocurrencies listed: <strong>10,841</strong></span>
+        <span>BNB: <strong>$304.39</strong></span>
+        <span>BTC: <strong>$24,000.45</strong></span>
+        <span>ETH: <strong>$12,000.10</strong></span>
+      </div>
+    </div>
+    <div class="top-bar-scroll top-bar-mobile">
+      <div class="top-bar-content">
+        <span>Cryptocurrencies listed: <strong>10,841</strong></span>
+        <span>BNB: <strong>$304.39</strong></span>
+        <span>BTC: <strong>$24,000.45</strong></span>
+        <span>ETH: <strong>$12,000.10</strong></span>
+      </div>
+      <div class="top-bar-content" aria-hidden="true">
+        <span>Cryptocurrencies listed: <strong>10,841</strong></span>
+        <span>BNB: <strong>$304.39</strong></span>
+        <span>BTC: <strong>$24,000.45</strong></span>
+        <span>ETH: <strong>$12,000.10</strong></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Main Navigation Bar (Header - Middle Row) -->
+<header class="main-header">
+  <nav class="container">
+    <div class="header-left">
+      <button class="search-toggle" aria-label="Toggle search" id="search-toggle"><span class="search-icon">⌕</span></button>
+      
+      <div class="header-search-wrapper" id="header-search-wrapper">
+
+        <div class="header-search">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input 
+            type="text" 
+            id="search-input" 
+            class="search-input header-search-input" 
+            placeholder="Try Shiba or address (0x...)" 
+            aria-label="Search cryptocurrencies" />
+          <button class="search-close" aria-label="Close search" id="search-close">×</button>
+        </div>
+
+        <div class="search-dropdown" id="search-dropdown-mobile">
+          <div class="search-dropdown-content">
+            <div class="search-dropdown-section">
+              <div class="search-dropdown-category">Coins</div>
+              <div class="search-dropdown-results" id="search-results-mobile">
+                <!-- Results will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="header-search-wrapper header-search-desktop">
+
+      <div class="header-search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input 
+          type="text" 
+          id="search-input-desktop" 
+          class="search-input header-search-input" 
+          placeholder="Try Shiba or address (0x...)" 
+          aria-label="Search cryptocurrencies" />
+      </div>
+
+      <div class="search-dropdown" id="search-dropdown-desktop">
+        <div class="search-dropdown-content">
+          <div class="search-dropdown-section">
+            <div class="search-dropdown-category">Coins</div>
+            <div class="search-dropdown-results" id="search-results-desktop">
+              <!-- Results will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="header-center">
+      <a href="{% url 'index_page_view' %}" class="logo" aria-label="CryptoMagneto Home">
+        <span class="logo-part1">Crypto</span>
+        <span class="logo-part2">Magneto</span>
+      </a>
+    </div>
+
+    <div class="header-right">
+      {% for btn_m in menu_items.btn_m %}
+        <a href="{% url btn_m.url %}" class="btn-header-a">
+          <button class="{{ btn_m.cls }}" aria-label="{{ btn_m.label }}">{{ btn_m.name }}</button>
+        </a>
+      {% endfor %}
+
+      {% comment %} <button class="btn-header btn-promote" aria-label="Promote your coin">Promote</button>
+      <button class="btn-header btn-submit" aria-label="Submit a new token">Submit Token</button> {% endcomment %}
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" id="mobile-menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+
+<!-- Submenu Navigation Bar (Under Main Header) -->
+<nav class="submenu-nav" id="submenu-nav">
+  <div class="container">
+    <div class="submenu-buttons">
+      {% for btn_m in menu_items.btn_m %}
+        <a href="{% url btn_m.url %}" class="btn-header-a">
+          <button class="{{ btn_m.cls }}" aria-label="{{ btn_m.label }}">{{ btn_m.name }}</button>
+        </a>
+      {% endfor %}
+    </div>
+
+    <ul class="submenu-links">
+      {% for nav_m in menu_items.nav_m %}
+        <li>
+          <a href="{% url nav_m.url %}">{{ nav_m.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+  </div>
+</nav>
+

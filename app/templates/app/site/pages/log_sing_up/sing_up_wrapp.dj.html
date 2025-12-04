@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en" data-layout="topnav">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" href="{% static 'app/css/webapp/log_sing_up/login_sing_up.css' %}"/>
+
+    <style>
+      .whale-logo-bottom-right {
+        background-image: url({{ img_lable }});
+        background-repeat: no-repeat;
+        background-position: 95% 97%;
+        background-size: 60px;
+    }
+    </style>
+
+  </head>
+
+  <body class="authentication-bg">
+    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xxl-4 col-lg-5">
+
+            <div class="card whale-logo-bottom-right">
+              <div class="card-body p-4" style="min-height:500px;">
+                <div class="text-center w-100 m-auto">
+                  <h4 class="text-dark-50 text-center mt-0 fw-bold">Create Account</h4>
+                  <p style="font-size: small">Accounts are free and required for upgrading your plan.</p>
+                </div>
+
+                <form method="post" class="form-horizontal" autocomplete="off" id="signup-form">
+                  <div class="mb-3">
+                    <label for="emailaddress" class="form-label tx-title">Email address</label>
+                    <input class="form-control" type="email" id="emailaddress" name="email" placeholder="Enter your email" value="" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label tx-title">Password</label>
+                    <div class="input-group input-group-merge">
+                      <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" />
+                      <div class="input-group-text" data-password="false">
+                        <span class="password-eye"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="tc" name="tc" />
+                      <label class="form-check-label fw-normal" for="tc">I have read and accept the 
+                        <a href="/terms-and-conditions.html">Terms and Conditions</a>
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input type="checkbox" class="form-check-input" id="ic" name="ic" />
+                      <label class="form-check-label fw-normal" for="ic">Keep me informed on AstroWhales news and offers. Unsubscribe at any moment.</label>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 text-center">
+                    <input type="hidden" id="client_id" name="client_id" value="" />
+                    <span class="btn-login btn-login-red"><button id="submit-button" class="btn btn-primary g-recaptcha rounded-pill w-50" style=" " data-sitekey="6Lfv15YUAAAAAHAi4G_0v23K4-R7l2z6gywxu8jj" data-callback="onSubmit" type="submit">Create Account</button></span>
+                    <div class="recaptcha-branding">
+                      This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-12 text-center">
+                <p class="text-muted">
+                  Already have account? <a href="/login/" class="ms-1"><b>Login</b></a>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer footer-alt">Copyright Whale Alert B.V. ©2024 All rights reserved</footer>
+
+    <script type="9509b2c64f2ff513b19634ea-text/javascript">
+      $(document).ready(function () {
+        $('#submit-button').click(function () {
+          setButtonWait(this)
+        })
+      })
+      
+      function onSubmit(token) {
+        if (window.location.href.indexOf('redirect') === -1) {
+          $('<input>')
+            .attr({
+              type: 'hidden',
+              id: 'redirect',
+              name: 'redirect',
+              value: document.referrer
+            })
+            .appendTo('#signup-form')
+        }
+      
+        $('#signup-form').submit()
+      }
+      
+      function setButtonWait(button) {
+        $(button).addClass('disabled')
+        $(button).html('Loading...')
+      }
+    </script>
+
+    {% comment %} <div id="cookie-banner" class="cookie-banner shadow-lg">
+      <div class="container d-flex flex-column flex-lg-row align-items-start align-items-lg-center py-2">
+        <div class="me-lg-3 small flex-grow-1">Whale Alert uses necessary cookies to make this website work. We are constantly improving the website and we'd like your consent for using additional cookies for collecting usage data which makes it possible for us to create a better browsing experience for all users.</div>
+        <div class="mt-2 mt-lg-0 d-flex gap-2 ms-lg-2">
+          <button id="cb-reject" class="btn btn-outline-light">Reject</button>
+          <button id="cb-accept" class="btn btn-primary">Consent</button>
+        </div>
+      </div>
+    </div> {% endcomment %}
+
+    <script type="9509b2c64f2ff513b19634ea-text/javascript">
+      ;(function () {
+        const KEY = 'wa_cookie_consent_v2',
+          VERSION = '2025-10-01'
+      
+        function save(c) {
+          localStorage.setItem(KEY, JSON.stringify({ ...c, ts: new Date().toISOString(), v: VERSION }))
+        }
+        function load() {
+          try {
+            return JSON.parse(localStorage.getItem(KEY))
+          } catch {
+            return null
+          }
+        }
+        function el() {
+          return document.getElementById('cookie-banner')
+        }
+        function show() {
+          const b = el()
+          if (b) {
+            b.style.display = ''
+          }
+        }
+        function hide() {
+          const b = el()
+          if (b) {
+            b.style.display = 'none'
+          }
+        }
+      
+        function apply(c) {
+          const grant = (v) => (v ? 'granted' : 'denied')
+          gtag('consent', 'update', {
+            analytics_storage: grant(c?.analytics),
+            ad_storage: grant(c?.ads),
+            ad_user_data: grant(c?.ads),
+            ad_personalization: grant(c?.ads),
+            functionality_storage: 'granted',
+            security_storage: 'granted'
+          })
+        }
+        function resetToDefaultDenied() {
+          gtag('consent', 'update', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+            functionality_storage: 'granted',
+            security_storage: 'granted'
+          })
+        }
+      
+        const existing = load()
+        if (existing) {
+          hide()
+          apply(existing)
+        } else {
+          show()
+        }
+      
+        const accept = document.getElementById('cb-accept')
+        const reject = document.getElementById('cb-reject')
+        if (accept)
+          accept.addEventListener('click', function () {
+            const c = { analytics: true, ads: true }
+            save(c)
+            apply(c)
+            hide()
+          })
+        if (reject)
+          reject.addEventListener('click', function () {
+            const c = { analytics: false, ads: false }
+            save(c)
+            apply(c)
+            hide()
+          })
+      
+        const reset = document.getElementById('cookie-reset')
+        if (reset)
+          reset.addEventListener('click', function (e) {
+            e.preventDefault()
+            localStorage.removeItem(KEY)
+            resetToDefaultDenied()
+            show()
+          })
+      })()
+    </script>
+  </body>
+</html>

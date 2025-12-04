@@ -1,0 +1,67 @@
+{% extends "admin/change_list.html" %}
+{% load i18n %}
+{% load static %}
+
+{# --------------------- Object Tools --------------------- #}
+{% block object-tools %}
+  {{ block.super }}
+  {# Здесь можно добавить кнопки типа "Добавить запись", "Экспорт" и т.д. #}
+{% endblock %}
+
+{# --------------------- Content Title --------------------- #}
+{% block content_title %}
+  {{ block.super }}
+  {# Здесь можно добавить кнопки/информацию рядом с заголовком страницы #}
+{% endblock %}
+
+{# --------------------- Filters --------------------- #}
+{% block change_list_filters %}
+  {{ block.super }}
+  {# Здесь можно добавить кастомные фильтры или дополнительный HTML #}
+{% endblock %}
+
+{# --------------------- Search Form --------------------- #}
+{% block search_form %}
+  {{ block.super }}
+  {# Здесь можно изменить или добавить поиск по объектам #}
+{% endblock %}
+
+{# --------------------- Result List --------------------- #}
+{% block result_list %}
+  {{ block.super }}
+  {# Здесь можно кастомизировать таблицу со всеми объектами #}
+{% endblock %}
+
+{# --------------------- Result Headers --------------------- #}
+{% block result_headers %}
+  {{ block.super }}
+  {# Заголовки колонок таблицы #}
+{% endblock %}
+
+{# --------------------- Result Rows --------------------- #}
+{% block result_rows %}
+  {{ block.super }}
+  {# Строки таблицы #}
+{% endblock %}
+
+{# --------------------- Pagination --------------------- #}
+{% block pagination %}
+  {{ block.super }}
+  {# Кастомная пагинация #}
+{% endblock %}
+
+{# --------------------- Footer --------------------- #}
+{% block footer %}
+  {{ block.super }}
+  {# Дополнительная информация внизу страницы #}
+{% endblock %}
+
+{# --------------------- Main Content --------------------- #}
+{% block content %}
+  {# Пример кнопки под заголовком #}
+  <div style="margin-top:20px;">
+    <a class="button" href="{% url 'admin:db_monitor' %}">Connection Monitor</a>
+  </div>
+  {{ block.super }}
+
+{% endblock %}

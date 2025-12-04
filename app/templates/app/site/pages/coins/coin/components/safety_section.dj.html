@@ -1,0 +1,31 @@
+
+{% if coin_obj.audit_status %}
+  <section class="token-safety-section">
+    <div class="token-info-card">
+      <h3 class="token-section-title">Token Safety & Audit</h3>
+      <div class="safety-info-grid">
+        <div class="safety-score-card">
+          <div class="safety-score-value">{{ coin_obj.security_score }}</div>
+          <div class="safety-score-label">Safety Score</div>
+          <div class="safety-score-bar">
+            <div class="safety-score-fill" style="width: {{ coin_obj.security_score }}%"></div>
+          </div>
+        </div>
+        <div class="audit-info">
+          <div class="audit-item">
+            <div class="audit-label">Audit Status</div>
+            <div class="audit-value audit-verified">✓ {{ coin_obj.audit_status }}</div>
+          </div>
+          <div class="audit-item">
+            <div class="audit-label">Audit Provider</div>
+            <div class="audit-value">{{ coin_obj.audit_provider }}</div>
+          </div>
+          <div class="audit-item">
+            <div class="audit-label">Last Audit Date</div>
+            <div class="audit-value">{{ coin_obj.last_date }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
