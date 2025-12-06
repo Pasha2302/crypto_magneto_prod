@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 
 from app.admin_registration.admin_forms.widgets.image_file_input import ImageFileInput
-from app.db_models import CoinSocial, SafetyAndAudit
+from app.db_models import CoinSocial, SafetyAndAudit, CoinPrediction
 
 
 # class ContractAddressInline(admin.TabularInline):
@@ -32,3 +32,7 @@ class CoinSocialInline(admin.StackedInline):
 
 class SafetyAndAuditInline(admin.StackedInline):
     model = SafetyAndAudit
+
+class CoinPredictionInline(admin.StackedInline):
+    model = CoinPrediction
+    extra = 1

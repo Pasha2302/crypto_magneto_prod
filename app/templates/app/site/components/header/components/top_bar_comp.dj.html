@@ -1,0 +1,10 @@
+
+
+  <span>Cryptocurrencies listed: <strong>{{ count_coins }}</strong></span>
+  {% for base_coin in base_coins %}
+    <span>{{ base_coin.symbol }}: <strong>${{ base_coin.price }}</strong></span>
+  {% endfor %}
+
+  {% comment %} <span>BNB: <strong>$304.39</strong></span>
+  <span>BTC: <strong>$24,000.45</strong></span>
+  <span>ETH: <strong>$12,000.10</strong></span> {% endcomment %}

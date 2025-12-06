@@ -15,27 +15,37 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2024</td>
-              <td>$40,000</td>
-              <td>$50,000</td>
-              <td>$65,000</td>
-              <td><span class="confidence-badge confidence-high">High</span></td>
-            </tr>
-            <tr>
-              <td>2025</td>
+
+            {% for p in coin_obj.predictions.all %}
+              <tr>
+                <td>{{ p.year }}</td>
+                <td>${{ p.min_price }}</td>
+                <td>${{ p.avg_price }}</td>
+                <td>${{ p.max_price }}</td>
+                <td>
+                  <span class="confidence-badge confidence-{{ p.confidence }}">
+                    {{ p.get_confidence_display }}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+
+            {% comment %} <tr>
+              <td>2027</td>
               <td>$60,000</td>
               <td>$80,000</td>
               <td>$100,000</td>
               <td><span class="confidence-badge confidence-medium">Medium</span></td>
             </tr>
+
             <tr>
-              <td>2026</td>
+              <td>2028</td>
               <td>$80,000</td>
               <td>$120,000</td>
               <td>$150,000</td>
               <td><span class="confidence-badge confidence-low">Low</span></td>
-            </tr>
+            </tr> {% endcomment %}
+
           </tbody>
         </table>
       </div>

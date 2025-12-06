@@ -4,60 +4,21 @@
     <div class="token-info-card">
       <h3 class="token-section-title">Team</h3>
       <div class="team-grid">
-        <div class="team-member-card">
-          <div class="team-member-avatar">
-            <span class="avatar-initial">JS</span>
+
+        {% for t in coin_obj.team_members %}
+          <div class="team-member-card">
+            {% if t.image %}
+              <img src="{{ t.img_64.url }}" class="team-member-avatar" alt="Image coin {{ t.name }}" loading="lazy">
+            {% else %}
+              <img src="/media/default_placeholder.webp" class="team-member-avatar" alt="No Image" aria-label="No Image" loading="lazy">
+            {% endif %}
+            <div class="team-member-info">
+              <div class="team-member-name">{{ t.name }}</div>
+              <div class="team-member-title">{{ t.job_title }}</div>
+            </div>
           </div>
-          <div class="team-member-info">
-            <div class="team-member-name">John Smith</div>
-            <div class="team-member-title">Chief Executive Officer</div>
-          </div>
-        </div>
-        <div class="team-member-card">
-          <div class="team-member-avatar">
-            <span class="avatar-initial">MJ</span>
-          </div>
-          <div class="team-member-info">
-            <div class="team-member-name">Michael Johnson</div>
-            <div class="team-member-title">Chief Technology Officer</div>
-          </div>
-        </div>
-        <div class="team-member-card">
-          <div class="team-member-avatar">
-            <span class="avatar-initial">EW</span>
-          </div>
-          <div class="team-member-info">
-            <div class="team-member-name">Emily Williams</div>
-            <div class="team-member-title">Lead Developer</div>
-          </div>
-        </div>
-        <div class="team-member-card">
-          <div class="team-member-avatar">
-            <span class="avatar-initial">DB</span>
-          </div>
-          <div class="team-member-info">
-            <div class="team-member-name">David Brown</div>
-            <div class="team-member-title">Blockchain Architect</div>
-          </div>
-        </div>
-        <div class="team-member-card">
-          <div class="team-member-avatar">
-            <span class="avatar-initial">SD</span>
-          </div>
-          <div class="team-member-info">
-            <div class="team-member-name">Sarah Davis</div>
-            <div class="team-member-title">Marketing Director</div>
-          </div>
-        </div>
-        <div class="team-member-card">
-          <div class="team-member-avatar">
-            <span class="avatar-initial">RM</span>
-          </div>
-          <div class="team-member-info">
-            <div class="team-member-name">Robert Miller</div>
-            <div class="team-member-title">Security Specialist</div>
-          </div>
-        </div>
+        {% endfor %}
+
       </div>
     </div>
   </section>

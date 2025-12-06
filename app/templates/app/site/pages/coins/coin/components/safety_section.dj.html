@@ -14,7 +14,11 @@
         <div class="audit-info">
           <div class="audit-item">
             <div class="audit-label">Audit Status</div>
-            <div class="audit-value audit-verified">✓ {{ coin_obj.audit_status }}</div>
+            {% if coin_obj.audit_status == 'Verified' %}
+              <div class="audit-value audit-verified">✓ {{ coin_obj.audit_status }}</div>
+            {% else %}
+              <div class="audit-value audit-unverified">✗ {{ coin_obj.audit_status }}</div>
+            {% endif %}
           </div>
           <div class="audit-item">
             <div class="audit-label">Audit Provider</div>

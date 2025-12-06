@@ -2,12 +2,13 @@
 
 <div class="filters-container">
 
-  <button class="filter-btn filter-hot" data-sort-direction="desc">
+  {% comment %} <button class="filter-btn filter-hot" data-sort-direction="desc">
     <span class="filter-icon">🔥</span>
     <span>Today's Hot</span>
   </button>
-
-  <button class="filter-btn"><span>All Time Best</span></button>
+  <button class="filter-btn">
+    <span>All Time Best</span>
+  </button> {% endcomment %}
   {% comment %} <button class="filter-btn"><span>GemPad</span></button> {% endcomment %}
 
   {% for item_f in filt_and_sort.table_filters %}

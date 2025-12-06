@@ -10,23 +10,23 @@
         <div class="tokenomics-stats">
           <div class="tokenomics-stat-item">
             <div class="tokenomics-label">Total Supply</div>
-            <div class="tokenomics-value">19,600,000 BTC</div>
+            <div class="tokenomics-value">{{ coin_obj.total_supply }} {{ coin_obj.symbol }}</div>
           </div>
           <div class="tokenomics-stat-item">
             <div class="tokenomics-label">Max Supply</div>
-            <div class="tokenomics-value">21,000,000 BTC</div>
+            <div class="tokenomics-value">{{ coin_obj.max_supply }} {{ coin_obj.symbol }}</div>
           </div>
           <div class="tokenomics-stat-item">
             <div class="tokenomics-label">Circulating Supply</div>
-            <div class="tokenomics-value">19,600,000 BTC</div>
+            <div class="tokenomics-value">{{ coin_obj.circulating_supply }} {{ coin_obj.symbol }}</div>
           </div>
           <div class="tokenomics-stat-item">
             <div class="tokenomics-label">Launch Date</div>
-            <div class="tokenomics-value">January 3, 2009</div>
+            <div class="tokenomics-value">{{ coin_obj.launch_date }}</div>
           </div>
           <div class="tokenomics-stat-item">
             <div class="tokenomics-label">Launch Price</div>
-            <div class="tokenomics-value">$0.0008</div>
+            <div class="tokenomics-value">${{ coin_obj.launch_price }}</div>
           </div>
         </div>
       </div>

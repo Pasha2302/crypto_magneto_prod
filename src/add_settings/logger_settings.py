@@ -24,6 +24,7 @@ def get_logfire_settings(os, base_dir: Path):
     logfire_configure = logfire.configure(
         service_name="crypto-magneto",
         environment="development",
+        token='pylf_v1_us_lbkT4Ny2cRx4ZGzGYpnpzsY6s3FVTvbFwGhJ1Rshs2tC',
         # min_level='debug'  # опционально
     )
     logfire.instrument_django(

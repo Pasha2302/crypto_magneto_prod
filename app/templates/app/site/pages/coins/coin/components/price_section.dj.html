@@ -3,6 +3,7 @@
   <section class="token-price-section">
     <div class="token-price-card">
       <div class="price-chart-wrapper">
+        
         <div class="price-chart-container">
           <div class="price-chart">
             <canvas id="price-chart" style="width: 100%; height: 400px;"></canvas>
@@ -21,27 +22,27 @@
             </div>
             <div class="market-stat-item">
               <div class="market-stat-label">Circulating Supply</div>
-              <div class="market-stat-value">19.60M BTC</div>
+              <div class="market-stat-value">{{ coin_obj.circulating_supply }} {{ coin_obj.symbol }}</div>
             </div>
             <div class="market-stat-item">
               <div class="market-stat-label">Total Supply</div>
-              <div class="market-stat-value">19.60M BTC</div>
+              <div class="market-stat-value">{{ coin_obj.total_supply }} {{ coin_obj.symbol }}</div>
             </div>
             <div class="market-stat-item">
               <div class="market-stat-label">Max Supply</div>
-              <div class="market-stat-value">21.00M BTC</div>
+              <div class="market-stat-value">{{ coin_obj.max_supply }} {{ coin_obj.symbol }}</div>
             </div>
             <div class="market-stat-item">
               <div class="market-stat-label">24h High</div>
-              <div class="market-stat-value">$43,890.20</div>
+              <div class="market-stat-value">${{ coin_obj.high_24h_price }}</div>
             </div>
             <div class="market-stat-item">
               <div class="market-stat-label">24h Low</div>
-              <div class="market-stat-value">$42,150.30</div>
+              <div class="market-stat-value">${{ coin_obj.low_24h_price }}</div>
             </div>
             <div class="market-stat-item">
               <div class="market-stat-label">Fully Diluted Market Cap</div>
-              <div class="market-stat-value">$908.26B</div>
+              <div class="market-stat-value">${{ coin_obj.fdmc }}</div>
             </div>
           </div>
         </div>

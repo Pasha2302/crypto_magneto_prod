@@ -4,13 +4,14 @@
 function showHideInlineBlocks() {
     // Функция для сворачивания/разворачивания инлайн-блоков:
 
-    $(".js-inline-admin-formset.inline-group").each(function () {
-        let $inlineBlock = $(this);
+    $(".js-inline-admin-formset.inline-group, .collaps-block").each(function () {
+        let $targetBlock = $(this);
         // Найдем заголовок h2
-        let $title = $inlineBlock.find("fieldset").find("h2");
+        let $title = $targetBlock.find("h2");
         // Создадим обертку для содержимого
         let $wrapper = $("<div class='inline-form-wrapper'></div>");
         // Переместим все после h2 в обертку
+        console.log("\nTarget Block Collaps:", $title);
         $title.nextAll().wrapAll($wrapper);
         // Создаем кнопку для сворачивания
         let $toggleBtn = $("<button type='button' class='inline-toggle'>Expand</button>");
@@ -19,9 +20,7 @@ function showHideInlineBlocks() {
 
         // Обработчик клика на кнопку
         $toggleBtn.on("click", function () {
-            const $formContent = $(this).closest(
-                ".js-inline-admin-formset.inline-group").find('.inline-form-wrapper');
-
+            const $formContent = $targetBlock.find('.inline-form-wrapper');
             let isHidden = $formContent.is(":hidden");
 
             if (isHidden) {

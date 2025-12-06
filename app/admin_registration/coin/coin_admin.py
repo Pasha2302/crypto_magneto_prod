@@ -3,7 +3,8 @@ from django.db import models
 from django.utils.safestring import mark_safe
 
 from app.admin_registration.admin_forms.widgets.image_file_input import ImageFileInput
-from app.admin_registration.coin.inline_models.coin_inline import CoinSocialInline, SafetyAndAuditInline
+from app.admin_registration.coin.inline_models.coin_inline import CoinSocialInline, SafetyAndAuditInline, \
+    CoinPredictionInline
 from app.db_models import BaseCoin
 from app.db_models.coin.coin_models import Coin, PromotedCoin
 
@@ -59,26 +60,33 @@ class CoinAdmin(admin.ModelAdmin):
     )
 
     fieldsets = (
-        (None, {
+        ('Readonly Fields', {
+            'fields': readonly_fields,
+            'classes': ('readonly-fields-wrapp', 'collaps-block', )
+        }),
+
+        ('MAIN INFORMATION', {
             'fields': (
                 'is_published', 'name', 'symbol', 'image', 'full_desc',
-                'categories', 'labels',
+                'categories', 'labels', 'team',
             )
-        }),
-        ('Contract Address', {
-            'fields': ('chain', 'contract_address',),
-            'classes': ('contract-address-wrapp',)
         }),
         ('Market Metrics', {
             'fields': (
-                'price', 'market_cap', 'liquidity_usd', 'volume_usd', 'volume_btc',
+                'price', 'price_change_24h', 'price_change_1h', 'high_24h_price', 'low_24h_price', 'launch_price',
+                'market_cap', 'liquidity_usd', 'volume_usd', 'volume_btc',
                 'market_cap_presale',
             ),
             'classes': ('market-metrics-wrapp',)
         }),
-        ('Readonly Fields', {
-            'fields': readonly_fields,
-            'classes': ('readonly-fields-wrapp',)
+        ('Metrics Supply', {
+            'fields': ('total_supply', 'max_supply', 'circulating_supply', ),
+            'classes': ('supply-metrics-wrapp',)
+        }),
+
+        ('Contract Address', {
+            'fields': ('chain', 'contract_address',),
+            'classes': ('contract-address-wrapp',)
         }),
     )
 
@@ -93,9 +101,9 @@ class CoinAdmin(admin.ModelAdmin):
     ordering = ['-created_at']  # Сортировка по убыванию — сначала новые
     list_filter = ('is_published', )  # Фильрация по полю в общем списке.
 
-    inlines = (SafetyAndAuditInline, CoinSocialInline, )
+    inlines = (SafetyAndAuditInline, CoinPredictionInline, CoinSocialInline, )
 
-    filter_horizontal = ('categories', 'labels', )
+    filter_horizontal = ('categories', 'labels', 'team')
 
     def display_image(self, obj):
         if hasattr(obj, 'image'):

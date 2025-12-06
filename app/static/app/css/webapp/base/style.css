@@ -3554,6 +3554,13 @@ a:hover {
 	font-size: 30px;
 	color: #fff;
 }
+.mini {
+    gap: 1px;
+    font-size: 14px;
+    color: #A3A3A0;
+    margin-bottom: 1px;
+}
+.mini b {font-size: 16px;}
 
 .token-price-changes-header {
     display: flex;
@@ -4355,6 +4362,11 @@ a:hover {
 
 .audit-verified {
     color: #10B981;
+    font-weight: 600;
+}
+.audit-unverified {
+    color: #dc3545; /* красный */
+    font-weight: 600;
 }
 
 /* Where to Buy */

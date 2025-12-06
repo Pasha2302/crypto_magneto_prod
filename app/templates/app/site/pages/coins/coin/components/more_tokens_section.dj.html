@@ -5,85 +5,41 @@
       <h3 class="token-section-title">More Tokens</h3>
       <div class="more-tokens-grid">
 
-        <a href="token.html" class="token-card">
-          <div class="token-card-header">
-            <div class="token-card-logo">
-              <span class="token-logo-text">ETH</span>
+        {% for coin_m in more_coins %}
+          <a href="{% url 'coin_page_view' coin_m.chain.symbol coin_m.slug %}" class="token-card">
+            <div class="token-card-header">
+
+              <div class="token-card-logo">
+                {% comment %} <span class="token-logo-text">ETH</span> {% endcomment %}
+                {% if coin_m.image %}
+                  <img class="coin-logo-small" src="{{ coin_m.image.url }}" alt="Image coin {{ coin_m.name }}" loading="lazy">
+                {% else %}
+                  <img src="/media/default_placeholder.webp" class="chain-icon" alt="No Image" aria-label="No Image" loading="lazy">
+                {% endif %}
+              </div>
+
+              <div class="token-card-info">
+                <div class="token-card-name">{{ coin_m.name }}</div>
+                <div class="token-card-symbol">{{ coin_m.symbol }}</div>
+              </div>
             </div>
-            <div class="token-card-info">
-              <div class="token-card-name">Ethereum</div>
-              <div class="token-card-symbol">ETH</div>
+
+            <div class="format-price mini">
+              <div>{{ coin_m.format_price }}</div>
             </div>
-          </div>
-          <div class="token-card-price">$2,650.75</div>
-          <div class="token-card-change token-card-change-positive">+5.2% 24h</div>
-        </a>
-        
-        <a href="token.html" class="token-card">
-          <div class="token-card-header">
-            <div class="token-card-logo">
-              <span class="token-logo-text">BNB</span>
-            </div>
-            <div class="token-card-info">
-              <div class="token-card-name">Binance Coin</div>
-              <div class="token-card-symbol">BNB</div>
-            </div>
-          </div>
-          <div class="token-card-price">$304.39</div>
-          <div class="token-card-change token-card-change-positive">+3.8% 24h</div>
-        </a>
-        <a href="token.html" class="token-card">
-          <div class="token-card-header">
-            <div class="token-card-logo">
-              <span class="token-logo-text">SOL</span>
-            </div>
-            <div class="token-card-info">
-              <div class="token-card-name">Solana</div>
-              <div class="token-card-symbol">SOL</div>
-            </div>
-          </div>
-          <div class="token-card-price">$98.45</div>
-          <div class="token-card-change token-card-change-negative">-2.1% 24h</div>
-        </a>
-        <a href="token.html" class="token-card">
-          <div class="token-card-header">
-            <div class="token-card-logo">
-              <span class="token-logo-text">ADA</span>
-            </div>
-            <div class="token-card-info">
-              <div class="token-card-name">Cardano</div>
-              <div class="token-card-symbol">ADA</div>
-            </div>
-          </div>
-          <div class="token-card-price">$0.52</div>
-          <div class="token-card-change token-card-change-positive">+1.5% 24h</div>
-        </a>
-        <a href="token.html" class="token-card">
-          <div class="token-card-header">
-            <div class="token-card-logo">
-              <span class="token-logo-text">DOT</span>
-            </div>
-            <div class="token-card-info">
-              <div class="token-card-name">Polkadot</div>
-              <div class="token-card-symbol">DOT</div>
-            </div>
-          </div>
-          <div class="token-card-price">$7.25</div>
-          <div class="token-card-change token-card-change-positive">+4.3% 24h</div>
-        </a>
-        <a href="token.html" class="token-card">
-          <div class="token-card-header">
-            <div class="token-card-logo">
-              <span class="token-logo-text">MATIC</span>
-            </div>
-            <div class="token-card-info">
-              <div class="token-card-name">Polygon</div>
-              <div class="token-card-symbol">MATIC</div>
-            </div>
-          </div>
-          <div class="token-card-price">$0.89</div>
-          <div class="token-card-change token-card-change-negative">-0.8% 24h</div>
-        </a>
+
+            {% if coin_m.price_change_24h > 0 %}
+              <div class="token-card-change token-card-change-positive">+{{ coin_m.price_change_24h }}% 24h</div>
+            {% elif coin_m.price_change_24h < 0 %}
+              <div class="token-card-change token-card-change-negative">{{ coin_m.price_change_24h }}% 24h</div>
+            {% elif coin_m.price_change_24h == 0 %}
+              <div class="token-card-change">{{ coin_m.price_change_24h }}% 24h</div>
+            {% else %}
+              <div class="token-card-change"> — </div>
+            {% endif %}
+          </a>
+        {% endfor %}
+
       </div>
     </div>
   </section>

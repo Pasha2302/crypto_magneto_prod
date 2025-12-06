@@ -6,6 +6,12 @@ from django.core.cache import cache
 from app.db_models import Chain, ImageSocial
 
 
+def format_int(value):
+    return f"{int(value):,}".replace(",", " ")
+
+def format_float(value, decimals=2):
+    return f"{float(value):,.{decimals}f}".replace(",", " ").replace(".", ",")
+
 def format_value_number(value_int):
     """
         Преобразует числовое значение в компактный формат с суффиксами

@@ -1,7 +1,9 @@
 import logging
 from django.http import HttpRequest
 
+from app.db_models import BaseCoin, Coin
 from app.db_models.site_models import ImageSite, ImageSocial
+from app.views.app.contexts.coin_context.tools import format_float, format_int
 
 logger = logging.getLogger(__name__)
 
@@ -91,11 +93,25 @@ class BaseContextManager:
             "image_alt": "AstroWhales site-image",
         }
 
+    @staticmethod
+    def __get_data_base_coin():
+        datas = []
+
+        for obj in BaseCoin.objects.all():
+            datas.append({
+                'symbol': obj.symbol,
+                'price': format_float(obj.price),
+            })
+
+        return datas
+
     def get(self) -> dict:
         self.context["images_obj"] = self.get_images_for_pages()
         self.context["menu_items"] = self.__get_data_menu(self.name_p)
         self.context["meta"] = self.__get_data_meta_tags(self.context["images_obj"].get('main', ''))
         self.context['name_page'] = self.name_p
+        self.context['base_coins'] = self.__get_data_base_coin()
+        self.context['count_coins'] = format_int(Coin.objects.filter(is_published=True).count())
 
         return self.context
 

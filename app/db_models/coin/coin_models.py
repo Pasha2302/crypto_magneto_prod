@@ -5,6 +5,8 @@ from django.utils.text import slugify
 from django.utils import timezone
 from django.conf import settings
 from django.urls import reverse
+from imagekit.models import ImageSpecField
+from pilkit.processors import ResizeToFit
 
 from app.db_models.site_models import ImageSocial
 from app.db_models.tools.format_price import normalized_price_coin
@@ -173,6 +175,60 @@ class SafetyAndAudit(models.Model):
         return self.coin.name if self.coin else ''
 
 
+class CoinPrediction(models.Model):
+    CONFIDENCE_CHOICES = [
+        ("high", "High"),
+        ("medium", "Medium"),
+        ("low", "Low"),
+    ]
+
+    coin = models.ForeignKey("Coin", on_delete=models.CASCADE, related_name="predictions")
+    year = models.PositiveIntegerField()
+    min_price = models.DecimalField(max_digits=20, decimal_places=2)
+    avg_price = models.DecimalField(max_digits=20, decimal_places=2)
+    max_price = models.DecimalField(max_digits=20, decimal_places=2)
+
+    confidence = models.CharField(
+        max_length=10,
+        choices=CONFIDENCE_CHOICES,
+        default="medium"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('created_at',)
+        verbose_name_plural = 'Coin Predictions'
+
+    def __str__(self):
+        return f"Prediction price {self.coin.name}" if self.coin else 'Prediction price'
+
+
+class TeamCoin(models.Model):
+    name = models.CharField(max_length=50)
+    job_title = models.CharField(max_length=50)
+
+    image = models.ImageField(
+        upload_to=default_image_upload_path,
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    img_64 = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=64, height=64)],
+        format='WEBP',
+        options={'lossless': True}  # Без потери качества.
+    )
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name_plural = 'Team Coins'
+
+    def __str__(self):
+        return f"{self.name} {self.job_title}"
+
+
 # =================================================================================================================== #
 
 class Coin(models.Model):
@@ -184,6 +240,7 @@ class Coin(models.Model):
     contract_address = models.CharField(max_length=128, null=True)
     chain = models.ForeignKey(Chain, on_delete=models.CASCADE, related_name="coin", null=True)
     full_desc = models.TextField(blank=True, null=True, verbose_name="Full Description")
+    views = models.IntegerField(blank=True, null=True)
 
     # Изображение монеты
     image = models.ImageField(
@@ -192,57 +249,94 @@ class Coin(models.Model):
         blank=True,
         null=True
     )
+    img_64 = ImageSpecField(
+        source='image',
+        processors=[ResizeToFit(width=64, height=64)],
+        format='WEBP',
+        options={'lossless': True}  # Без потери качества.
+    )
 
-    # Категории и метки
+    # ManyToManyField
     categories = models.ManyToManyField(Category, related_name="coins", blank=True)
     labels = models.ManyToManyField(Label, related_name="coins", blank=True)
+    team = models.ManyToManyField(
+        TeamCoin,
+        related_name="coins",
+        blank=True,
+        help_text="Команда проекта"
+    )
 
     # Метрики рынка (с nullable там, где данные могут отсутствовать)
-    market_cap = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
+    market_cap_presale = models.BooleanField(default=False)
+
     price = models.DecimalField(max_digits=30, decimal_places=18, blank=True, null=True)
+    price_change_24h = models.FloatField(blank=True, null=True)
+    price_change_1h = models.FloatField(blank=True, null=True)
+    high_24h_price = models.DecimalField(max_digits=30, decimal_places=18, null=True)
+    low_24h_price = models.DecimalField(max_digits=30, decimal_places=18, null=True)
+
+    market_cap = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     format_price = models.CharField(max_length=50, blank=True, null=True)
     liquidity_usd = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
+
     volume_usd = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     volume_btc = models.DecimalField(max_digits=20, decimal_places=8, blank=True, null=True)
 
-    # Изменения цен
-    price_change_24h = models.FloatField(blank=True, null=True)
-    price_change_1h = models.FloatField(blank=True, null=True)
+    # -------------------------------
+    # TOKENOMICS & SUPPLY
+    # -------------------------------
 
-    # Активность пользователей
-    buys_h1 = models.IntegerField(blank=True, null=True)
-    sells_h1 = models.IntegerField(blank=True, null=True)
-    buys_h24 = models.IntegerField(blank=True, null=True)
-    sells_h24 = models.IntegerField(blank=True, null=True)
-    views = models.IntegerField(blank=True, null=True)
-    votes = models.IntegerField(blank=True, null=True)
-    votes24h = models.IntegerField(blank=True, null=True)
+    # Total Supply — общее количество монет, созданных на данный момент.
+    # Может меняться у некоторых монет, но нечасто.
+    total_supply = models.DecimalField(
+        max_digits=30, decimal_places=8,
+        null=True, blank=True,
+        help_text="Общее количество существующих монет на данный момент"
+    )
 
-    # Статусы и флаги
-    market_cap_presale = models.BooleanField(default=False)
-    is_published = models.BooleanField(default=False)
+    # Max Supply — максимальное количество монет, которое когда-либо может существовать.
+    # Например, для Bitcoin = 21 000 000
+    max_supply = models.DecimalField(
+        max_digits=30, decimal_places=8,
+        null=True, blank=True,
+        help_text="Максимально возможное количество монет (лимит эмиссии)"
+    )
+
+    # Circulating Supply — количество монет в свободном обращении сейчас.
+    # Меняется почти каждый день.
+    circulating_supply = models.DecimalField(
+        max_digits=30, decimal_places=8,
+        null=True, blank=True,
+        help_text="Количество монет, находящихся в обращении"
+    )
+
+    # Launch Price — цена монеты в момент запуска.
+    launch_price = models.DecimalField(
+        max_digits=20, decimal_places=8,
+        null=True, blank=True,
+        help_text="Цена монеты на момент запуска"
+    )
 
     # Даты
-    launch_date = models.DateField(blank=True, null=True)
+    launch_date = models.DateField(
+        null=True, blank=True,
+        help_text="Дата запуска монеты"
+    )
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     last_price_update = models.DateTimeField(blank=True, null=True)
     published_at = models.DateTimeField(blank=True, null=True)
 
-    # Оценки и рейтинги
-    market_cap_rank = models.IntegerField(blank=True, null=True)
+    is_published = models.BooleanField(default=False)
 
-    popularity_score = models.FloatField(blank=True, null=True)
-    popularity_rank = models.IntegerField(blank=True, null=True)
-    popularity_updated_at = models.DateTimeField(blank=True, null=True)
-    security_score = models.FloatField(blank=True, null=True)
-    security_updated_at = models.DateTimeField(blank=True, null=True)
-    gugu_score = models.FloatField(blank=True, null=True)
-    gugu_rank = models.IntegerField(blank=True, null=True)
+    @property
+    def fdmc_computed(self):
+        # Получить Fully Diluted Market Cap:
+        if self.price and self.max_supply:
+            return self.price * self.max_supply
+        return None
 
-    # Источники и страницы
-    source_page = models.URLField(blank=True, null=True)
-
+    # ===================================================================================== #
     class Meta:
         ordering = ('pk',)
         verbose_name_plural = 'Coins'
