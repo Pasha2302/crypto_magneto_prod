@@ -1,6 +1,7 @@
 # app/tasks.py
 from celery import shared_task
 
+from app.tasks_all.create_fake_data_coin.fake_data_starter import FakeDataCoinManager
 from app.tasks_all.db_monitoring_tasks import save_db_connections_snapshot
 # from app.tasks_all.send_contact import send_contact_email
 
@@ -16,12 +17,12 @@ def start_every_10_minutes():
 
 @shared_task(queue='default')
 def start_every_one_hours():
-    """ Каждый час (Тяжелая задача)"""
-    pass
+    """ Каждый час """
+    FakeDataCoinManager().run()
 
 @shared_task(queue='default')
 def start_every_two_hours():
-    """ Каждые два часа (Тяжелая задача)"""
+    """ Каждые два часа """
     pass
 
 # ================================================== No Crone  ==================================================== #
