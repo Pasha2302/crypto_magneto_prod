@@ -13,7 +13,7 @@ class FakeTokenomicsCreator(BaseFakeCreator):
     """
 
     # Hard safety caps (защита, но НЕ часть логики)
-    MAX_MARKET_CAP = Decimal("900000000000")   # 9e11 — предел DecimalField
+    MAX_MARKET_CAP = Decimal("9000000000000")   # 9e11 — предел DecimalField
     MAX_LIQUIDITY = Decimal("250000000")       # 2.5e8
     MAX_VOLUME = Decimal("500000000")          # 5e8
 
@@ -50,6 +50,9 @@ class FakeTokenomicsCreator(BaseFakeCreator):
 
     def _cap(self, value: Decimal, limit: Decimal, precision=2) -> Decimal:
         """Устанавливаем лимит, но не ломаем распределение."""
+        if value > limit: value = Decimal(str(
+            self._rand.uniform(float(limit - 1_000_000_000), float(limit))
+        ))
         value = min(value, limit)
         return self._dec(value, precision)
 
