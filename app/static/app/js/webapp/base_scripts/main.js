@@ -16,7 +16,7 @@ function updateViewportUnits() {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const namePage = document.body.dataset.page;
     console.log(`\nMain script loaded ... Page: ${namePage}`);
 
@@ -41,9 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     } else if ( namePage === 'page_coin' ) {
-        import('../coin_page/coin.js').then( ({ init_page_coin }) => {
+        (async () => {
+            await import('../coin_page/charts/node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js');
+            console.log('Lightweight Charts loaded');
+
+            const { init_page_coin } = await import('../coin_page/coin.js');
             init_page_coin(baseEv, apiClientJs);
-        });
+        })();
 
     } else if ( namePage === 'add_coin' ) {
         import('../add_coin_page/add_coin.js').then( ({ init_add_coin_page }) => {
