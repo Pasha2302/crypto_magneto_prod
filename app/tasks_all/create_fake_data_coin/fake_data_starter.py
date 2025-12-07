@@ -63,7 +63,7 @@ class FakeDataCoinManager:
                 for field, value in update_data.items():
                     setattr(coin, field, value)
                 coin.save()
-            logger.info("Updated coin %s with fields: %s", coin.slug, list(update_data.keys()))
+            # logger.info("Updated coin %s with fields: %s", coin.slug, list(update_data.keys()))
         except Exception as exc:
             logger.exception("Error saving coin %s: %s", coin.slug, exc)
             raise
