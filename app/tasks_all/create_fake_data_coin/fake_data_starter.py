@@ -1,6 +1,7 @@
 import logging
 from django.db import transaction
 from app.db_models import Coin
+from .tools.prediction_fake import FakePredictionCreator
 from .tools.price_fake import PriceFakeCreator
 from .tools.config import PriceFakeConfig, LaunchPriceConfig
 from .tools.tokenomics_fake import FakeTokenomicsCreator
@@ -31,7 +32,8 @@ class FakeDataCoinManager:
         # creators — список инстансов BaseFakeCreator
         self.creators = creators if creators is not None else [
             FakeTokenomicsCreator(),
-            PriceFakeCreator(price_cfg, launch_cfg)
+            PriceFakeCreator(price_cfg, launch_cfg),
+            FakePredictionCreator(),
         ]
 
     def run(self):
