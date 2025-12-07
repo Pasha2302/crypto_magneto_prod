@@ -10,7 +10,6 @@ celerybeat-schedule-shm
 celerybeat-schedule-wal
 start_uvicorn.sh
 stop_uvicorn.sh
-/*.json
 
 
 
