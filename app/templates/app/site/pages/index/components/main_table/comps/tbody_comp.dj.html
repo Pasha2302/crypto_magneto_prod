@@ -92,7 +92,11 @@
           <td>—</td>
         {% endif %}
 
-        <td>In 2 months</td>
+        {% if coin_d.launch_date %}
+          <td>{{ coin_d.launch_date }}</td>
+        {% else %}
+          <td>—</td>
+        {% endif %}
       </tr>
     {% endfor %}
 
