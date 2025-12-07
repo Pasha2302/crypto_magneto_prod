@@ -1,6 +1,7 @@
 import logging
 from django.db import transaction
 from app.db_models import Coin
+from .tools.fake_safety_and_audit import FakeSafetyAndAuditCreator
 from .tools.prediction_fake import FakePredictionCreator
 from .tools.price_fake import PriceFakeCreator
 from .tools.config import PriceFakeConfig, LaunchPriceConfig
@@ -34,6 +35,7 @@ class FakeDataCoinManager:
             FakeTokenomicsCreator(),
             PriceFakeCreator(price_cfg, launch_cfg),
             FakePredictionCreator(),
+            FakeSafetyAndAuditCreator(),
         ]
 
     def run(self):
