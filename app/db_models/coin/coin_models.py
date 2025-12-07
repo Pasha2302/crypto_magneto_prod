@@ -276,7 +276,7 @@ class Coin(models.Model):
     high_24h_price = models.DecimalField(max_digits=30, decimal_places=18, null=True)
     low_24h_price = models.DecimalField(max_digits=30, decimal_places=18, null=True)
 
-    market_cap = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
+    market_cap = models.DecimalField(max_digits=28, decimal_places=2, blank=True, null=True)
     liquidity_usd = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
 
     volume_usd = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)

@@ -1,6 +1,7 @@
 import random
 from decimal import Decimal
 from typing import Dict
+
 from app.db_models import Coin
 from app.tasks_all.create_fake_data_coin.tools.base_creator import BaseFakeCreator
 
@@ -11,21 +12,22 @@ class FakeTokenomicsCreator(BaseFakeCreator):
     Возвращает dict — не сохраняет объект Coin.
     """
 
-    # Безопасные лимиты, не превышающие DECIMAL(max_digits=20, decimal_places=2)
-    MAX_MARKET_CAP = Decimal("900000000000")   # 9e11
-    MAX_LIQUIDITY = Decimal("200000000")       # 2e8
+    # Hard safety caps (защита, но НЕ часть логики)
+    MAX_MARKET_CAP = Decimal("900000000000")   # 9e11 — предел DecimalField
+    MAX_LIQUIDITY = Decimal("250000000")       # 2.5e8
     MAX_VOLUME = Decimal("500000000")          # 5e8
 
     BTC_PRICE = Decimal("60000")
 
-    def __init__(self,
-                 supply_min=1_000,
-                 supply_max=10_000_000_000,
-                 volume_min=10_000,
-                 volume_max=500_000_000,
-                 liquidity_min=5_000,
-                 liquidity_max=250_000_000):
-
+    def __init__(
+        self,
+        supply_min=1_000,
+        supply_max=10_000_000_000,
+        volume_min=10_000,
+        volume_max=500_000_000,
+        liquidity_min=5_000,
+        liquidity_max=250_000_000,
+    ):
         self.supply_min = Decimal(supply_min)
         self.supply_max = Decimal(supply_max)
         self.volume_min = Decimal(volume_min)
@@ -35,13 +37,11 @@ class FakeTokenomicsCreator(BaseFakeCreator):
 
         self._rand = random.Random()
 
-    # -----------------------------
     # Helpers
-    # -----------------------------
-
-    def _dec(self, value, precision=8) -> Decimal:
-        """Нормализованный Decimal с указанной точностью."""
-        return Decimal(str(round(Decimal(value), precision)))
+    @staticmethod
+    def _dec(value: Decimal, precision=8) -> Decimal:
+        """Безопасное приведение к Decimal с округлением."""
+        return value.quantize(Decimal(10) ** -precision)
 
     def _rand_range_dec(self, min_v: Decimal, max_v: Decimal, precision=8) -> Decimal:
         """Случайный Decimal из диапазона."""
@@ -49,14 +49,11 @@ class FakeTokenomicsCreator(BaseFakeCreator):
         return self._dec(value, precision)
 
     def _cap(self, value: Decimal, limit: Decimal, precision=2) -> Decimal:
-        """Ограничивает значение лимитом."""
+        """Устанавливаем лимит, но не ломаем распределение."""
         value = min(value, limit)
         return self._dec(value, precision)
 
-    # -----------------------------
-    # Main
-    # -----------------------------
-
+    # GENERATOR
     def generate(self, coin: Coin) -> Dict[str, object]:
         """
         total_supply
@@ -68,8 +65,7 @@ class FakeTokenomicsCreator(BaseFakeCreator):
         volume_btc
         """
 
-        # -------- SUPPLY --------
-
+        # SUPPLY
         max_supply = (
             Decimal(coin.max_supply)
             if coin.max_supply
@@ -88,19 +84,23 @@ class FakeTokenomicsCreator(BaseFakeCreator):
             else self._rand_range_dec(total_supply * Decimal("0.3"), total_supply)
         )
 
-        # -------- MARKET CAP --------
+        # -----------------------------
+        # MARKET CAP
+        # -----------------------------
         if coin.price:
             market_cap = Decimal(coin.price) * circulating_supply
             market_cap = self._cap(market_cap, self.MAX_MARKET_CAP, precision=2)
+
         else:
+            # Цена неизвестна -> генерим реальный диапазон
             market_cap = self._rand_range_dec(
-                Decimal("10000000"),
-                Decimal("5000000000"),
+                Decimal("10000000"),      # 10M
+                Decimal("5000000000"),    # 5B
                 precision=2
             )
             market_cap = self._cap(market_cap, self.MAX_MARKET_CAP)
 
-        # -------- LIQUIDITY --------
+        # LIQUIDITY
         liquidity_usd = (
             Decimal(coin.liquidity_usd)
             if coin.liquidity_usd
@@ -108,10 +108,9 @@ class FakeTokenomicsCreator(BaseFakeCreator):
         )
         liquidity_usd = self._cap(liquidity_usd, self.MAX_LIQUIDITY)
 
-        # -------- VOLUME --------
+        # VOLUME
         volume_usd = self._rand_range_dec(self.volume_min, self.volume_max, precision=2)
         volume_usd = self._cap(volume_usd, self.MAX_VOLUME)
-
         volume_btc = self._dec(volume_usd / self.BTC_PRICE, precision=8)
 
         return {
