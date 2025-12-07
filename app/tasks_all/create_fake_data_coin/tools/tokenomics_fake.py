@@ -11,8 +11,6 @@ class FakeTokenomicsCreator(BaseFakeCreator):
     Генератор фейковых данных токеномики и рыночных метрик.
     Возвращает dict — не сохраняет объект Coin.
     """
-
-    # Hard safety caps (защита, но НЕ часть логики)
     MAX_MARKET_CAP = Decimal("9000000000000")   # 9e11 — предел DecimalField
     MAX_LIQUIDITY = Decimal("250000000")       # 2.5e8
     MAX_VOLUME = Decimal("500000000")          # 5e8
@@ -58,16 +56,6 @@ class FakeTokenomicsCreator(BaseFakeCreator):
 
     # GENERATOR
     def generate(self, coin: Coin) -> Dict[str, object]:
-        """
-        total_supply
-        max_supply
-        circulating_supply
-        market_cap
-        liquidity_usd
-        volume_usd
-        volume_btc
-        """
-
         # SUPPLY
         max_supply = (
             Decimal(coin.max_supply)
@@ -87,9 +75,7 @@ class FakeTokenomicsCreator(BaseFakeCreator):
             else self._rand_range_dec(total_supply * Decimal("0.3"), total_supply)
         )
 
-        # -----------------------------
         # MARKET CAP
-        # -----------------------------
         if coin.price:
             market_cap = Decimal(coin.price) * circulating_supply
             market_cap = self._cap(market_cap, self.MAX_MARKET_CAP, precision=2)
