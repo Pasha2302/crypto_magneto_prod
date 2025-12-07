@@ -27,8 +27,7 @@ class FakeSafetyAndAuditCreator:
         """
 
         # Проверяем, есть ли уже запись
-        if hasattr(coin, "safety_and_audit"):
-            return coin.safety_and_audit
+        if hasattr(coin, "safety_and_audit"): return {}
         # Выбор статуса
         audit_status = random.choice([self.status_verified, self.status_unverified])
         # Provider — всегда один из списка
