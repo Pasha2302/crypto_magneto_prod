@@ -269,6 +269,7 @@ class Coin(models.Model):
     # Метрики рынка (с nullable там, где данные могут отсутствовать)
     market_cap_presale = models.BooleanField(default=False)
 
+    format_price = models.CharField(max_length=50, blank=True, null=True)
     price = models.DecimalField(max_digits=30, decimal_places=18, blank=True, null=True)
     price_change_24h = models.FloatField(blank=True, null=True)
     price_change_1h = models.FloatField(blank=True, null=True)
@@ -276,7 +277,6 @@ class Coin(models.Model):
     low_24h_price = models.DecimalField(max_digits=30, decimal_places=18, null=True)
 
     market_cap = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
-    format_price = models.CharField(max_length=50, blank=True, null=True)
     liquidity_usd = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
 
     volume_usd = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
