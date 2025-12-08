@@ -27,18 +27,6 @@ export class ChartManager {
 
     }
 
-    // init() {
-    //     const { createChart, CandlestickSeries } = window.LightweightCharts;
-    //     this.chart = createChart(this.container, {...ChartConfig.chart,});
-
-    //     console.log('Chart initialized:', this.chart);
-    //     // Рабочий метод для standalone-билда
-    //     this.candleSeries = this.chart.addSeries(CandlestickSeries, {
-    //         ...ChartConfig.candles,
-    //     });
-    // }
-
-
     setChartInterval(interval, seriesesData, intervalColors) {
         this.candleSeries.setData(seriesesData.get(interval));
         this.candleSeries.applyOptions({
@@ -48,17 +36,13 @@ export class ChartManager {
     }
 
     init(md) {
-        const { createChart, LineSeries } = window.LightweightCharts;
-
+        const { createChart, LineSeries, AreaSeries } = window.LightweightCharts;
         const seriesesData = new Map([
             ['1D', md.dayData],
             ['1W', md.weekData],
             ['1M', md.monthData],
             ['1Y', md.yearData],
         ]);
-        this.chart = createChart(this.container, ChartConfig.chart);
-
-
         const intervalColors = {
             '1D': '#2962FF',
             '1W': 'rgb(225, 87, 90)',
@@ -66,7 +50,15 @@ export class ChartManager {
             '1Y': 'rgb(164, 89, 209)',
         };
 
-        this.candleSeries = this.chart.addSeries(LineSeries, { color: intervalColors['1D'] });
+        this.chart = createChart(this.container, ChartConfig.chart);
+        // this.candleSeries = this.chart.addSeries(LineSeries, { color: intervalColors['1D'] });
+        this.candleSeries = this.chart.addSeries(AreaSeries, {
+            topColor: '#2962FF',
+            bottomColor: 'rgba(41, 98, 255, 0.28)',
+            lineColor: '#2962FF',
+            lineWidth: 2,
+            crossHairMarkerVisible: false,
+        });
         this.setChartInterval('1D', seriesesData, intervalColors);
 
         const styles = `

@@ -7,26 +7,27 @@ export const ChartConfig = {
             background: { type: 'solid', color: '#1A1B28' },
             textColor: '#ffffff',
         },
+
+        // Скрыть линии сетки
         grid: {
-            vertLines: { color: '#eee' },
-            horzLines: { color: '#eee' },
+            vertLines: {
+                visible: false,
+            },
+            horzLines: {
+                visible: false,
+            },
         },
+
         timeScale: {
             timeVisible: true,
             secondsVisible: false,
         },
+
         rightPriceScale: {
-            scaleMargins: { top: 0.2, bottom: 0.1 },
+            scaleMargins: {
+                top: 0.3,  // Оставить немного места для легенды
+                bottom: 0.1
+            },
         },
-    },
-
-    candles: {
-        upColor: '#4CAF50',
-        downColor: '#E53935',
-        borderUpColor: '#4CAF50',
-        borderDownColor: '#E53935',
-        wickUpColor: '#4CAF50',
-        wickDownColor: '#E53935',
-
     },
 };
