@@ -265,6 +265,7 @@ class CoinDataManager:
     def get_promoted_coins(self):
         sort_field = self.client_params.sort_field.value
         sort_direction = self.client_params.sort_direction.value
+
         cache_key = f"coins_promoted_tables_{sort_field}_{sort_direction}"
         cache_ttl = 600  # время жизни кеша в секундах (например, 10 минут)
         # Попытка получить из кеша

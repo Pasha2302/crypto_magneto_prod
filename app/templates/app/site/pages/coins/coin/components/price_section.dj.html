@@ -5,6 +5,7 @@
       <div class="price-chart-wrapper">
         
         <div class="price-chart-container">
+          {{ chart_price_mocke|json_script:"chart-data-price-json" }}
           <div class="price-chart">
             <div id="price-chart" style="width: 100%;"></div>
           </div>

@@ -1,3 +1,8 @@
+import random
+from datetime import datetime, timedelta
+from decimal import Decimal
+
+from django.utils import timezone
 from django.db.models import Prefetch
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -7,6 +12,76 @@ from app.views.app.contexts.bsae_context import BaseContextManager
 from app.views.app.contexts.coin_context.tools import (
     formatted_launch_date, render_format_price, format_value_number, format_float
 )
+from django.core.cache import cache
+import logfire
+
+
+def generate_daily_history(base_price: Decimal, years: int = 4):
+    """Генерирует исторические данные на N лет назад."""
+    base_price = round(base_price, 9)
+    if base_price == 0:
+        return []
+
+    days = years * 365
+    today = timezone.now().date()
+
+    result = []
+    price = base_price
+
+    # ограничения колебаний
+    max_daily_change = Decimal("0.05")   # 5%
+    min_daily_change = Decimal("0.001")  # 0.1%
+
+    for i in range(days + 1):
+        date = today - timedelta(days=i)
+
+        if i > 0:
+            direction = 1 if random.random() > 0.5 else -1
+            percent = Decimal(str(random.uniform(float(min_daily_change),
+                                                 float(max_daily_change))))
+            price = price - price * percent * direction
+            price = round(price, 9)
+
+        result.append({
+            "time": date.isoformat(),
+            "value": float(price)
+        })
+
+    result.reverse()   # чтобы шли в нормальном порядке
+    return result
+
+def aggregate_weekly(data):
+    """Берёт последнее значение каждой недели."""
+    weekly = {}
+    for item in data:
+        date = datetime.fromisoformat(item["time"]).date()
+        year, week, _ = date.isocalendar()
+        weekly[(year, week)] = item  # последнее значение недели
+
+    return list(weekly.values())
+
+
+def aggregate_monthly(data):
+    """Берёт последнее значение каждого месяца."""
+    monthly = {}
+    for item in data:
+        date = datetime.fromisoformat(item["time"]).date()
+        key = (date.year, date.month)
+        monthly[key] = item
+
+    return list(monthly.values())
+
+
+def aggregate_yearly(data):
+    """Берёт последнее значение каждого года."""
+    yearly = {}
+    for item in data:
+        date = datetime.fromisoformat(item["time"]).date()
+        yearly[date.year] = item
+
+    return list(yearly.values())
+
+# ============================================================================================== #
 
 
 class CoinPageContextManager:
@@ -16,6 +91,35 @@ class CoinPageContextManager:
         self.coin_slug = coin_slug
 
         self.__context = BaseContextManager(self.request, name_page='page_coin').get()
+
+    @staticmethod
+    def __get_data_chart_price(current_price: Decimal, coin_id):
+        cache_key = f"coin_{coin_id}_chart_price"
+        cache_ttl = 600  # время жизни кеша в секундах (например, 10 минут)
+        # Попытка получить из кеша
+        cached_result = cache.get(cache_key)
+        if cached_result is not None:
+            logfire.info("Кэш-попадание для get_data_chart_price")
+            return cached_result
+
+        # 1) Генерим день за 4 года
+        day_data = generate_daily_history(current_price, years=4)
+        # 2) Агрегации
+        week_data = aggregate_weekly(day_data)
+        month_data = aggregate_monthly(day_data)
+        year_data = aggregate_yearly(day_data)
+
+        data = {
+            "dayData": day_data,
+            "weekData": week_data,
+            "monthData": month_data,
+            "yearData": year_data,
+        }
+        # Сохраняем результат в кеш
+        cache.set(cache_key, data, cache_ttl)
+        logfire.info("Кэш установлен для get_data_chart_price", ttl=cache_ttl)
+
+        return data
 
     @staticmethod
     def __set_data_coin(context: dict, chain_symbol: str, coin_slug: str):
@@ -63,7 +167,6 @@ class CoinPageContextManager:
             else f"{explorer_url}/{coin_obj.contract_address}"
         )
         coin_obj.socials_qs = coin_obj.socials.all()
-
         coin_obj.team_members = coin_obj.team.all()
 
         context['coin_obj'] = coin_obj
@@ -89,6 +192,10 @@ class CoinPageContextManager:
     def get(self) -> dict:
         self.__set_data_coin(self.__context, self.chain_symbol, self.coin_slug)
         self.__set_more_coins(self.__context, self.chain_symbol, self.coin_slug)
+
+        self.__context['chart_price_mocke'] = self.__get_data_chart_price(
+            self.__context['coin_obj'].price, self.__context['coin_obj'].pk
+        )
         return self.__context
 
 

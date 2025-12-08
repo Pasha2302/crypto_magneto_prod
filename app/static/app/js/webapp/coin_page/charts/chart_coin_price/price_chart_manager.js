@@ -29,10 +29,8 @@ export class ChartManager {
 
     setChartInterval(interval, seriesesData, intervalColors) {
         this.candleSeries.setData(seriesesData.get(interval));
-        this.candleSeries.applyOptions({
-            lineColor: intervalColors[interval],
-        });
-        this.chart.timeScale().fitContent();
+        this.candleSeries.applyOptions( {lineColor: intervalColors[interval]} );
+        this.chart.timeScale().fitContent();   // Автоматически подогнать масштаб по данным
     }
 
     init(md) {
