@@ -56,14 +56,6 @@ export class ChartManager {
             ['1M', md.monthData],
             ['1Y', md.yearData],
         ]);
-
-        const chartOptions = {
-            layout: {
-                textColor: 'black',
-                background: { type: 'solid', color: 'white' },
-            },
-            height: 200,
-        };
         this.chart = createChart(this.container, ChartConfig.chart);
 
 
@@ -123,12 +115,6 @@ export class ChartManager {
         });
 
         this.container.appendChild(buttonsContainer);
-    }
-
-    setData(data) {
-        if (!this.candleSeries) return;
-        this.candleSeries.setData(data);
-        this.chart.timeScale().fitContent();
     }
 
     destroy() {

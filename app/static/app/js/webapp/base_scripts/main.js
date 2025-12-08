@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // -----
     const apiClientJs = new RequestJs({baseUrl: window.location.origin + '/api-app-v1/'});
-
     const baseEv = new BaseEvent();
     baseEv.attachDOMEvents();
     
@@ -36,23 +35,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     // -----
 
     if ( namePage === 'index' ) {
-        import('../index_page/index.js').then( ({ init_page_index }) => {
-            init_page_index(baseEv, apiClientJs);
-        });
+        const { init_page_index } = await import('../index_page/index.js');
+        init_page_index(baseEv, apiClientJs);
 
     } else if ( namePage === 'page_coin' ) {
-        (async () => {
-            await import('../coin_page/charts/node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js');
-            console.log('Lightweight Charts loaded');
-
-            const { init_page_coin } = await import('../coin_page/coin.js');
-            init_page_coin(baseEv, apiClientJs);
-        })();
+        await import('../coin_page/charts/node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js');
+        console.log('Lightweight Charts loaded');
+        const { init_page_coin } = await import('../coin_page/coin.js');
+        init_page_coin(baseEv, apiClientJs);
 
     } else if ( namePage === 'add_coin' ) {
-        import('../add_coin_page/add_coin.js').then( ({ init_add_coin_page }) => {
-            init_add_coin_page(baseEv, apiClientJs);
-        });
+        const { init_add_coin_page } = await import('../add_coin_page/add_coin.js');
+        init_add_coin_page(baseEv, apiClientJs);
     }
 
 });
