@@ -30,7 +30,7 @@ export class ChartManager {
     setChartInterval(interval, seriesesData, intervalColors) {
         this.candleSeries.setData(seriesesData.get(interval));
         this.candleSeries.applyOptions({
-            color: intervalColors[interval],
+            lineColor: intervalColors[interval],
         });
         this.chart.timeScale().fitContent();
     }
@@ -44,8 +44,8 @@ export class ChartManager {
             ['1Y', md.yearData],
         ]);
         const intervalColors = {
-            '1D': '#2962FF',
-            '1W': 'rgb(225, 87, 90)',
+            '1D': '#1cce75ff',
+            '1W': 'rgba(165, 216, 47, 1)',
             '1M': 'rgb(242, 142, 44)',
             '1Y': 'rgb(164, 89, 209)',
         };
@@ -55,7 +55,6 @@ export class ChartManager {
         this.candleSeries = this.chart.addSeries(AreaSeries, {
             topColor: '#2962FF',
             bottomColor: 'rgba(41, 98, 255, 0.28)',
-            lineColor: '#2962FF',
             lineWidth: 2,
             crossHairMarkerVisible: false,
         });
