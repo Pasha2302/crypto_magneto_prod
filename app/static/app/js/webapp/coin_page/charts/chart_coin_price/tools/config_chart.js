@@ -19,7 +19,7 @@ export const ChartConfig = {
         },
 
         timeScale: {
-            timeVisible: true,
+            timeVisible: false,
             secondsVisible: false,
         },
 
@@ -30,4 +30,18 @@ export const ChartConfig = {
             },
         },
     },
+
+    series: {
+        topColor: '#2962FF',
+        bottomColor: 'rgba(41, 98, 255, 0.28)',
+        lineWidth: 2,
+        crossHairMarkerVisible: false,
+
+        priceFormat: {
+            type: 'price',
+            precision: 8,       // количество знаков после запятой
+            minMove: 0.00000001 // минимальный шаг
+        }
+    },
+
 };

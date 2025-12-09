@@ -50,14 +50,9 @@ export class ChartManager {
 
         this.chart = createChart(this.container, ChartConfig.chart);
         // this.candleSeries = this.chart.addSeries(LineSeries, { color: intervalColors['1D'] });
-        this.candleSeries = this.chart.addSeries(AreaSeries, {
-            topColor: '#2962FF',
-            bottomColor: 'rgba(41, 98, 255, 0.28)',
-            lineWidth: 2,
-            crossHairMarkerVisible: false,
-        });
+        this.candleSeries = this.chart.addSeries(AreaSeries, ChartConfig.series);
+        
         this.setChartInterval('1D', seriesesData, intervalColors);
-
         const styles = `
             .buttons-container {
                 display: flex;
