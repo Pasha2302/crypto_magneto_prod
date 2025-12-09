@@ -27,14 +27,16 @@ export class ChartManager {
 
     }
 
-    setChartInterval(interval, seriesesData, intervalColors) {
+    setChartInterval(interval, seriesesData, intervalColors, candlestickSeries) {
         this.candleSeries.setData(seriesesData.get(interval));
         this.candleSeries.applyOptions( {lineColor: intervalColors[interval]} );
+
+        candlestickSeries.setData(seriesesData.get(interval));
         this.chart.timeScale().fitContent();   // Автоматически подогнать масштаб по данным
     }
 
-    init(md) {
-        const { createChart, LineSeries, AreaSeries } = window.LightweightCharts;
+    init(md, testData) {
+        const { createChart, LineSeries, CandlestickSeries, AreaSeries } = window.LightweightCharts;
         const seriesesData = new Map([
             ['1D', md.dayData],
             ['1W', md.weekData],
@@ -52,7 +54,21 @@ export class ChartManager {
         // this.candleSeries = this.chart.addSeries(LineSeries, { color: intervalColors['1D'] });
         this.candleSeries = this.chart.addSeries(AreaSeries, ChartConfig.series);
 
-        this.setChartInterval('1D', seriesesData, intervalColors);
+        // Добавляем серию объёмов на вторую панель
+        const candlestickSeries = this.chart.addSeries(CandlestickSeries, {
+            upColor: '#26a69a', downColor: '#ef5350', borderVisible: false,
+            wickUpColor: '#26a69a', wickDownColor: '#ef5350',
+            priceFormat: {
+                type: 'price',
+                precision: 8,       // количество знаков после запятой
+                minMove: 0.00000001 // минимальный шаг
+            }
+        }, 1); // Устанавливаем индекс панели 1 для этой серии (вторая панель будет иметь индекс 2)
+        // Устанавливаем высоту второй панели:
+        const candlesPane = this.chart.panes()[1];
+        candlesPane.setHeight(150);
+
+        this.setChartInterval('1D', seriesesData, intervalColors, candlestickSeries);
 
         // Кнопки переключения интервала
         const btns = document.querySelectorAll('.btns-chart-price button');
@@ -61,9 +77,13 @@ export class ChartManager {
             btn.addEventListener('click', () => {
                 btns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                this.setChartInterval(interval, seriesesData, intervalColors)
+                this.setChartInterval(interval, seriesesData, intervalColors, candlestickSeries);
             });
         });
+
+        
+        // candlesPane.moveTo(0);
+        // this.chart.timeScale().fitContent();
 
     }
 

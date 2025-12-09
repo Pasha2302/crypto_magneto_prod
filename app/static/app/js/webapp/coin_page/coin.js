@@ -15,7 +15,7 @@ export function init_page_coin(baseEv, apiClientJs) {
     // Инициализация графика цены монеты:
     const manager = new ChartManager("price-chart");
     const mockData = new DataProviderMock();
-    manager.init(mockData.getMockData());
+    manager.init(mockData.getMockData(), mockData.getTestData());
     // ---- //
 
 }

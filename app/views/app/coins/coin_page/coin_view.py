@@ -17,7 +17,8 @@ import logfire
 
 
 def generate_daily_history(base_price: Decimal, years: int = 4):
-    """Генерирует исторические данные на N лет назад."""
+    """Генерирует исторические OHLC + value."""
+
     base_price = round(base_price, 9)
     if base_price == 0:
         return []
@@ -29,26 +30,61 @@ def generate_daily_history(base_price: Decimal, years: int = 4):
     price = base_price
 
     # ограничения колебаний
-    max_daily_change = Decimal("0.05")   # 5%
-    min_daily_change = Decimal("0.001")  # 0.1%
+    max_daily_change = Decimal("0.06")   # максимум 6% диапазона
+    min_daily_change = Decimal("0.01")   # минимум 1%
 
     for i in range(days + 1):
         date = today - timedelta(days=i)
 
-        if i > 0:
+        if i == 0:
+            # первая свеча — фиксируем open = close = base_price
+            open_price = price
+            close_price = price
+            high_price = price
+            low_price = price
+        else:
+            # --------- 1) Генерируем изменение цены ---------
             direction = 1 if random.random() > 0.5 else -1
             percent = Decimal(str(random.uniform(float(min_daily_change),
                                                  float(max_daily_change))))
-            price = price - price * percent * direction
-            price = round(price, 9)
+            close_price = price - price * percent * direction
+            close_price = round(close_price, 9)
+
+            # --------- 2) Свеча OHLC ---------
+            open_price = price
+
+            # волатильность внутри дня
+            intraday_vol = float(percent) * float(price)
+
+            high_price = float(open_price) + random.uniform(0, intraday_vol)
+            low_price = float(open_price) - random.uniform(0, intraday_vol)
+
+            # high >= max(open, close)
+            high_price = max(high_price, float(open_price), float(close_price))
+            # low <= min(open, close)
+            low_price = min(low_price, float(open_price), float(close_price))
+
+            # округления
+            open_price = round(float(open_price), 9)
+            high_price = round(high_price, 9)
+            low_price = round(low_price, 9)
+            close_price = round(float(close_price), 9)
+
+            # новая база для следующей свечи
+            price = Decimal(str(close_price))
 
         result.append({
             "time": date.isoformat(),
-            "value": float(price)
+            "open": open_price,
+            "high": high_price,
+            "low": low_price,
+            "close": close_price,
+            "value": close_price  # для текущего line-графика
         })
 
-    result.reverse()   # чтобы шли в нормальном порядке
+    result.reverse()
     return result
+
 
 def aggregate_weekly(data):
     """Берёт последнее значение каждой недели."""
