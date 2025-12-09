@@ -51,54 +51,20 @@ export class ChartManager {
         this.chart = createChart(this.container, ChartConfig.chart);
         // this.candleSeries = this.chart.addSeries(LineSeries, { color: intervalColors['1D'] });
         this.candleSeries = this.chart.addSeries(AreaSeries, ChartConfig.series);
-        
+
         this.setChartInterval('1D', seriesesData, intervalColors);
-        const styles = `
-            .buttons-container {
-                display: flex;
-                flex-direction: row;
-                gap: 8px;
-            }
-            .buttons-container button {
-                all: initial;
-                font-family: -apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu,
-                    sans-serif;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 510;
-                line-height: 24px; /* 150% */
-                letter-spacing: -0.32px;
-                padding: 8px 24px;
-                color: rgba(19, 23, 34, 1);
-                background-color: rgba(240, 243, 250, 1);
-                border-radius: 8px;
-                cursor: pointer;
-            }
 
-            .buttons-container button:hover {
-                background-color: rgba(224, 227, 235, 1);
-            }
-
-            .buttons-container button:active {
-                background-color: rgba(209, 212, 220, 1);
-            }
-        `;
-
-        const stylesElement = document.createElement('style');
-        stylesElement.innerHTML = styles;
-        this.container.appendChild(stylesElement);
-
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.classList.add('buttons-container');
-        const intervals = ['1D', '1W', '1M', '1Y'];
-        intervals.forEach(interval => {
-            const button = document.createElement('button');
-            button.innerText = interval;
-            button.addEventListener('click', () => this.setChartInterval(interval, seriesesData, intervalColors));
-            buttonsContainer.appendChild(button);
+        // Кнопки переключения интервала
+        const btns = document.querySelectorAll('.btns-chart-price button');
+        btns.forEach( (btn) => {
+            const interval = btn.dataset.interval;
+            btn.addEventListener('click', () => {
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.setChartInterval(interval, seriesesData, intervalColors)
+            });
         });
 
-        this.container.appendChild(buttonsContainer);
     }
 
     destroy() {

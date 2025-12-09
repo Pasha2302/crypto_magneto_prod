@@ -1,0 +1,81 @@
+<style>
+  .price-chart-container {
+    width: 100%;
+  }
+  
+  /* Заголовок графика */
+  .chart-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 10px;
+  }
+  
+  .chart-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    color: #e4e7eb;
+    letter-spacing: -0.3px;
+    background: linear-gradient(90deg, #eaf0ff 0%, #c7d2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .btns-chart-price {
+    display: flex;
+    gap: 8px;
+  }
+  
+  /* Базовый стиль кнопок */
+  .btns-chart-price button {
+    padding: 6px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+  
+    font-size: 14px;
+    font-weight: 500;
+    color: #aeb7c6;
+  
+    cursor: pointer;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(6px);
+  }
+  
+  /* Hover эффект */
+  .btns-chart-price button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  
+  /* Активная кнопка */
+  .btns-chart-price button.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #60a5fa;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.45);
+  }
+  
+  /* При клике */
+  .btns-chart-price button:active {
+    transform: scale(0.97);
+  }
+</style>
+
+
+<div class="price-chart-container">
+  {{ chart_price_mocke|json_script:'chart-data-price-json' }}
+  <div class="chart-header">
+    <h3>{{ coin_obj.symbol }} Price Chart</h3>
+    <div class="btns-chart-price">
+      <button data-interval="1D" class="active">1D</button>
+      <button data-interval="1W">1W</button>
+      <button data-interval="1M">1M</button>
+      <button data-interval="1Y">1Y</button>
+    </div>
+  </div>
+
+  <div id="price-chart" style="width: 100%;"></div>
+</div>

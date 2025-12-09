@@ -1,52 +1,47 @@
 
 
-  <section class="token-price-section">
-    <div class="token-price-card">
-      <div class="price-chart-wrapper">
-        
-        <div class="price-chart-container">
-          {{ chart_price_mocke|json_script:"chart-data-price-json" }}
-          <div class="price-chart">
-            <div id="price-chart" style="width: 100%;"></div>
+<section class="token-price-section">
+  <div class="token-price-card">
+    <div class="price-chart-wrapper">
+
+      {% include 'app/site/pages/coins/coin/components/comps/chart_price.dj.html' %}
+
+      <div class="market-stats-sidebar">
+        <div class="market-stats-list">
+          <div class="market-stat-item">
+            <div class="market-stat-label">Market Cap</div>
+            <div class="market-stat-value">${{ coin_obj.market_cap }}</div>
           </div>
-        </div>
-        
-        <div class="market-stats-sidebar">
-          <div class="market-stats-list">
-            <div class="market-stat-item">
-              <div class="market-stat-label">Market Cap</div>
-              <div class="market-stat-value">${{ coin_obj.market_cap }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">Volume (24h)</div>
-              <div class="market-stat-value">${{ coin_obj.volume_usd }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">Circulating Supply</div>
-              <div class="market-stat-value">{{ coin_obj.circulating_supply }} {{ coin_obj.symbol }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">Total Supply</div>
-              <div class="market-stat-value">{{ coin_obj.total_supply }} {{ coin_obj.symbol }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">Max Supply</div>
-              <div class="market-stat-value">{{ coin_obj.max_supply }} {{ coin_obj.symbol }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">24h High</div>
-              <div class="market-stat-value">${{ coin_obj.high_24h_price }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">24h Low</div>
-              <div class="market-stat-value">${{ coin_obj.low_24h_price }}</div>
-            </div>
-            <div class="market-stat-item">
-              <div class="market-stat-label">Fully Diluted Market Cap</div>
-              <div class="market-stat-value">${{ coin_obj.fdmc }}</div>
-            </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">Volume (24h)</div>
+            <div class="market-stat-value">${{ coin_obj.volume_usd }}</div>
+          </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">Circulating Supply</div>
+            <div class="market-stat-value">{{ coin_obj.circulating_supply }} {{ coin_obj.symbol }}</div>
+          </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">Total Supply</div>
+            <div class="market-stat-value">{{ coin_obj.total_supply }} {{ coin_obj.symbol }}</div>
+          </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">Max Supply</div>
+            <div class="market-stat-value">{{ coin_obj.max_supply }} {{ coin_obj.symbol }}</div>
+          </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">24h High</div>
+            <div class="market-stat-value">${{ coin_obj.high_24h_price }}</div>
+          </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">24h Low</div>
+            <div class="market-stat-value">${{ coin_obj.low_24h_price }}</div>
+          </div>
+          <div class="market-stat-item">
+            <div class="market-stat-label">Fully Diluted Market Cap</div>
+            <div class="market-stat-value">${{ coin_obj.fdmc }}</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
