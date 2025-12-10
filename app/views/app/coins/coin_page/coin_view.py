@@ -119,6 +119,47 @@ def aggregate_yearly(data):
 
 # ============================================================================================== #
 
+def get_tokenomics_data(coin_obj: Coin) -> dict:
+    """
+    Формирует логичные данные токеномики для круговой диаграммы.
+    Использует circulating_supply, total_supply и max_supply.
+    """
+
+    circulating = coin_obj.circulating_supply or 0
+    total = coin_obj.total_supply or circulating
+    max_supply = coin_obj.max_supply or total
+
+    # 1) В обращении
+    circulating_part = circulating
+
+    # 2) Заблокировано / не в обращении
+    locked_part = max(total - circulating, 0)
+
+    # 3) Не выпущено
+    not_minted_part = max(max_supply - total, 0)
+
+    labels = []
+    values = []
+
+    if circulating_part > 0:
+        labels.append("Circulating Supply")
+        values.append(circulating_part)
+
+    if locked_part > 0:
+        labels.append("Locked / Reserved")
+        values.append(locked_part)
+
+    if not_minted_part > 0:
+        labels.append("Not Yet Minted")
+        values.append(not_minted_part)
+
+    return {
+        "labels": labels,
+        "values": values,
+        "max_supply": max_supply,
+    }
+
+
 
 class CoinPageContextManager:
     def __init__(self, request: HttpRequest, chain_symbol: str, coin_slug: str):
@@ -170,6 +211,7 @@ class CoinPageContextManager:
             chain__symbol__iexact=chain_symbol,  # без учёта регистра
             slug=coin_slug
         )
+        context['chart_tokenomics_mocke'] = get_tokenomics_data(coin_obj)
 
         coin_obj.launch_date = formatted_launch_date(date_type=coin_obj.launch_date)
         coin_obj.symbol = coin_obj.symbol if coin_obj.symbol.startswith('$') else f"${coin_obj.symbol}"

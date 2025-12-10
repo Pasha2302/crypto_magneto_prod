@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Правильный импорт Chart.js UMD
         await import('../../node_modules/chart.js/dist/chart.umd.min.js');
+        await import('https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2');
         console.log('Chart.js loaded');
 
         const { init_page_coin } = await import('../coin_page/coin.js');

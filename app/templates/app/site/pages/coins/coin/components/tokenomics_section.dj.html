@@ -4,9 +4,9 @@
     <div class="token-info-card">
       <h3 class="token-section-title">Tokenomics & Supply</h3>
       <div class="tokenomics-grid">
-        <div class="tokenomics-chart-container">
-          <canvas id="tokenomics-chart" style="width: 100%; height: 250px;"></canvas>
-        </div>
+
+        {% include 'app/site/pages/coins/coin/components/comps/chart_tokenomics.dj.html' %}
+
         <div class="tokenomics-stats">
           <div class="tokenomics-stat-item">
             <div class="tokenomics-label">Total Supply</div>
@@ -29,6 +29,7 @@
             <div class="tokenomics-value">${{ coin_obj.launch_price }}</div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
