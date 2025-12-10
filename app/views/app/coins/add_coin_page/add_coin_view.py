@@ -24,3 +24,12 @@ def add_coin_page_view(request: HttpRequest) -> HttpResponse:
         context=context,
     )
 
+def coin_added_success(request: HttpRequest) -> HttpResponse:
+    context = BaseContextManager(request, name_page='add_coin').get()
+
+    return render(
+        request,
+        template_name='app/site/pages/coins/add_coin/add_coin_success.dj.html',
+        context=context,
+    )
+

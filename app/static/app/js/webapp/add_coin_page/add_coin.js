@@ -40,10 +40,10 @@ class SubmittingForm {
             mainErrorElm.className = 'error_1';
             setTimeout(() => location.reload(), 30000);
         } else {
-            if (resp.redirect) {
-                location = resp.redirect;
+            if (resp.success) {
+                location = "/coin-added-success/";
             } else {
-                document.querySelector('.coin-success')?.classList.add('open');
+                location = "/"
             }
         }
     }
