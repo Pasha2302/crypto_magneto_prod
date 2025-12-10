@@ -7,7 +7,7 @@ from app.views.app.additional.terms_and_conditions_view import terms_page_view
 from app.views.app.coins.add_coin_page.add_coin_view import add_coin_page_view
 from app.views.app.coins.coin_page.coin_view import coin_page_view
 from app.views.app.index_page.index_view import index_page_view
-
+from app.views.app.robots_txt_page.robots_txt_view import robots_txt
 
 urlpatterns = [
     path('', index_page_view, name='index_page_view'),
@@ -28,4 +28,5 @@ urlpatterns = [
     path('disclaimer/', disclaimer_page_view, name='disclaimer_page_view'),
 
     # path('test-page/', test_page_view, name='test_page_view'),
+    path("robots.txt", robots_txt, name="robots_txt"),
 ]
