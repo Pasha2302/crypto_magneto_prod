@@ -81,6 +81,7 @@
 export class TableFilterStateManager {
     constructor(storageKey = 'table_filter_state') {
         this.storageKey = storageKey; // формально больше не нужен, но оставляем для совместимости
+        this.filterPage = null;
 
         this.defaultState = {
             sort_field: "price",
@@ -110,6 +111,7 @@ export class TableFilterStateManager {
         const filterPage = document.querySelector('.filters-container').dataset.filterpage;
         console.log('Filter Page from DOM:', filterPage);
         if (filterPage) {
+            this.filterPage = filterPage;
             this.defaultState.filter_options[filterPage] = true;
         }
         return structuredClone(this.defaultState);
@@ -265,7 +267,9 @@ export class TableFilterEventManager {
             if ( filterOptions === 'reset' ) {
                 this.stateManager.reset();
                 this.getDataTable(this.wrappTableElm).catch( (err) => console.error('[onFilterBtn] Request error', err) );
-                document.querySelectorAll('.filters-container .filter-btn').forEach( elm => elm.classList.remove('filter-active') );
+                document.querySelectorAll('.filters-container .filter-btn').forEach( elm => {
+                    if (elm.dataset.name !== this.stateManager.filterPage) elm.classList.remove('filter-active');
+                });
                 document.querySelector('.filter-btn.filter-select').value = '';
                 return;
             }
@@ -276,10 +280,14 @@ export class TableFilterEventManager {
             value = value == false;
             console.log(`Filter Option Name: ${filterOptions}\nFilter Value: ${value}`);
 
-            this.stateManager.update( key, value );
-            // Смена активного класса:
-            elm.classList.toggle('filter-active');
-            this.getDataTable(this.wrappTableElm).catch( (err) => console.error('[onFilterBtn] Request error', err) );
+            if (filterOptions !== this.stateManager.filterPage) {
+                // Сброс других фильтров, если это не основной фильтр страницы
+                this.stateManager.update( key, value );
+                // Смена активного класса:
+                elm.classList.toggle('filter-active');
+                this.getDataTable(this.wrappTableElm).catch( (err) => console.error('[onFilterBtn] Request error', err) );
+            }
+           
         }
 
     }
