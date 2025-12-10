@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from app.views.app.additional.contact_page.contact_view import contact_page_view
 from app.views.app.additional.disclaimer_view import disclaimer_page_view
@@ -10,6 +10,8 @@ from app.views.app.index_page.index_view import index_page_view
 from app.views.app.robots_txt_page.robots_txt_view import robots_txt
 
 urlpatterns = [
+    path('', include('app.sitemaps.urls')),  # Подключаем маршруты из sitemaps/urls.py
+
     path('', index_page_view, name='index_page_view'),
     path('presale/', index_page_view, name='presale'),
     path('new/', index_page_view, name='new'),
