@@ -35,7 +35,7 @@ export class ChartManager {
         this.chart.timeScale().fitContent();   // Автоматически подогнать масштаб по данным
     }
 
-    init(md, testData) {
+    init(md) {
         const { createChart, LineSeries, CandlestickSeries, AreaSeries } = window.LightweightCharts;
         const seriesesData = new Map([
             ['1D', md.dayData],

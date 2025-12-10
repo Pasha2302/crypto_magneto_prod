@@ -92,14 +92,8 @@
     </div>
 
     <div class="header-right">
-      {% for btn_m in menu_items.btn_m %}
-        <a href="{% url btn_m.url %}" class="btn-header-a">
-          <button class="{{ btn_m.cls }}" aria-label="{{ btn_m.label }}">{{ btn_m.name }}</button>
-        </a>
-      {% endfor %}
+      {% include 'app/site/components/header/components/menu_btn.dj.html' %}
 
-      {% comment %} <button class="btn-header btn-promote" aria-label="Promote your coin">Promote</button>
-      <button class="btn-header btn-submit" aria-label="Submit a new token">Submit Token</button> {% endcomment %}
       <button class="mobile-menu-toggle" aria-label="Toggle menu" id="mobile-menu-toggle">
         <span></span>
         <span></span>
@@ -113,12 +107,9 @@
 <!-- Submenu Navigation Bar (Under Main Header) -->
 <nav class="submenu-nav" id="submenu-nav">
   <div class="container">
+    
     <div class="submenu-buttons">
-      {% for btn_m in menu_items.btn_m %}
-        <a href="{% url btn_m.url %}" class="btn-header-a">
-          <button class="{{ btn_m.cls }}" aria-label="{{ btn_m.label }}">{{ btn_m.name }}</button>
-        </a>
-      {% endfor %}
+      {% include 'app/site/components/header/components/menu_btn.dj.html' %}
     </div>
 
     <ul class="submenu-links">

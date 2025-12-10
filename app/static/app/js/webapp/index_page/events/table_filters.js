@@ -107,6 +107,11 @@ export class TableFilterStateManager {
 
     // Создание состояния только из defaultState
     _loadState() {
+        const filterPage = document.querySelector('.filters-container').dataset.filterpage;
+        console.log('Filter Page from DOM:', filterPage);
+        if (filterPage) {
+            this.defaultState.filter_options[filterPage] = true;
+        }
         return structuredClone(this.defaultState);
     }
 

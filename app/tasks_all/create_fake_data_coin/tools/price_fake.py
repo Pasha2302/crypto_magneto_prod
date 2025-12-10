@@ -156,5 +156,4 @@ class PriceFakeCreator(BaseFakeCreator):
 
             out["launch_price"] = launch_price
 
-        # Всё готово — возвращаем словарь
         return out

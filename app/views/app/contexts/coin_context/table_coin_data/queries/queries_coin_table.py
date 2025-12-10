@@ -44,12 +44,33 @@ class TableCoinQueryParams(BaseModel):
             return None
         return value
 
+# ========================================================================================== #
+
+
+def apply_filter_from_route_name(raw_data: dict, route_name: str) -> dict:
+    """
+    Если route_name совпадает с именем фильтра — включаем его.
+    Например route_name="presale" -> filter_options.presale=True
+    """
+    # список доступных фильтров ровно как в FilteringOptions
+    available_filters = {"new", "presale", "doxxed", "audited"}
+
+    if route_name in available_filters:
+        filter_opts = raw_data.setdefault("filter_options", {})
+        filter_opts[route_name] = True
+
+    return raw_data
+
 
 class TableCoinParamsService:
 
     @staticmethod
-    def parse_from_request(request) -> TableCoinQueryParams:
+    def parse_from_request(request, route_name='') -> TableCoinQueryParams:
         raw_data = parse_request_data(request)
+
+        # применяем фильтр, если имя маршрута совпадает с фильтром
+        raw_data = apply_filter_from_route_name(raw_data, route_name)
+
         try:
             return TableCoinQueryParams(**raw_data)
         except ValidationError as e:

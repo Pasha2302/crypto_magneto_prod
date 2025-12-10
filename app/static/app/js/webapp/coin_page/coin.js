@@ -15,7 +15,21 @@ export function init_page_coin(baseEv, apiClientJs) {
     // Инициализация графика цены монеты:
     const manager = new ChartManager("price-chart");
     const mockData = new DataProviderMock();
-    manager.init(mockData.getMockData(), mockData.getTestData());
+    manager.init(mockData.getMockData());
     // ---- //
+
+
+    const Chart = window.Chart;
+    console.log(Chart); // работает
+    const ctx = document.getElementById('tokenomics-chart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['A', 'B', 'C'],
+            datasets: [{
+                data: [10, 20, 30]
+            }]
+        }
+    });
 
 }

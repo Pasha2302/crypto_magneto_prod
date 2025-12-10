@@ -14,21 +14,23 @@
    {% comment %} Main Content:  {% endcomment %}
   <main class="container">
 
-    {% comment %} Content Cards Section 3 tables  {% endcomment %}
-    {% include 'app/site/pages/index/components/top_tables.dj.html' %}
+    {% if not is_filter_page %}
+      {% comment %} Content Cards Section 3 tables  {% endcomment %}
+      {% include 'app/site/pages/index/components/top_tables.dj.html' %}
 
 
-    {% comment %} Promoted Tokens Table:  {% endcomment %}
-    <section class="promoted-coins-section">
-      <div class="promoted-coins-header">
-        <h2 class="promoted-coins-title">Promoted Tokens</h2>
-        {% comment %} <button class="btn-promote-coin" aria-label="Promote your cryptocurrency token">Promote your coin</button> {% endcomment %}
-      </div>
-      {% comment %} Main Table:  {% endcomment %}
-      <div id="table-promoted-block" style="display: contents;">
-        {% include 'app/site/pages/index/components/main_table/main_table_wrapp.dj.html' with coins=promoted_coins filt_and_sort=filt_and_sort only %}
-      </div>
-    </section>
+      {% comment %} Promoted Tokens Table:  {% endcomment %}
+      <section class="promoted-coins-section">
+        <div class="promoted-coins-header">
+          <h2 class="promoted-coins-title">Promoted Tokens</h2>
+          {% comment %} <button class="btn-promote-coin" aria-label="Promote your cryptocurrency token">Promote your coin</button> {% endcomment %}
+        </div>
+        {% comment %} Main Table:  {% endcomment %}
+        <div id="table-promoted-block" style="display: contents;">
+          {% include 'app/site/pages/index/components/main_table/main_table_wrapp.dj.html' with coins=promoted_coins filt_and_sort=filt_and_sort only %}
+        </div>
+      </section>
+    {% endif %}
 
 
     {% comment %} Coins Main Table  {% endcomment %}
@@ -58,12 +60,13 @@
       </div>
     </section>
 
+    {% if not is_filter_page %}
+      {% comment %} Our Partners Section: {% endcomment %}
+      {% include 'app/site/pages/index/components/secondary_comps/partners.dj.html' %}
 
-    {% comment %} Our Partners Section: {% endcomment %}
-    {% include 'app/site/pages/index/components/secondary_comps/partners.dj.html' %}
-
-    {% comment %} Main Text Block Section: {% endcomment %}
-    {% include 'app/site/pages/index/components/secondary_comps/text_block.dj.html' %}
+      {% comment %} Main Text Block Section: {% endcomment %}
+      {% include 'app/site/pages/index/components/secondary_comps/text_block.dj.html' %}
+    {% endif %}
 
     {% comment %} Subscribe Section:  {% endcomment %}
     {% include 'app/site/pages/index/components/secondary_comps/subscribe.dj.html' %}

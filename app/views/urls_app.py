@@ -11,6 +11,13 @@ from app.views.app.index_page.index_view import index_page_view
 
 urlpatterns = [
     path('', index_page_view, name='index_page_view'),
+    path('presale/', index_page_view, name='presale'),
+    path('new/', index_page_view, name='new'),
+    path('audited/', index_page_view, name='audited'),
+    path('doxxed/', index_page_view, name='doxxed'),
+    path('List-tokens/', index_page_view, name='List_tokens'),
+
+
     path('token/<slug:chain_symbol>/<slug:coin_slug>', coin_page_view, name='coin_page_view'),
 
     path('submit-token/', add_coin_page_view, name='add_coin_page_view'),

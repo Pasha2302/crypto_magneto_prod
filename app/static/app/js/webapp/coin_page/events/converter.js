@@ -47,9 +47,7 @@ export class ConverterEventManager {
         };
     }
 
-    // -------------------------------
     // Пересчёт
-    // -------------------------------
     async recalc() {
         const amount = Number(this.inputFrom.value) || 0;
         const from = this.selectFrom.value;
@@ -66,9 +64,7 @@ export class ConverterEventManager {
         }
     }
 
-    // -------------------------------
     // Swap
-    // -------------------------------
     onSwap(ev, elm) {
         const prevFrom = this.selectFrom.value;
         const prevTo = this.selectTo.value;

@@ -1,6 +1,6 @@
 
 
-<div class="filters-container">
+<div class="filters-container" data-filterPage="{{ filter_page }}">
 
   {% comment %} <button class="filter-btn filter-hot" data-sort-direction="desc">
     <span class="filter-icon">🔥</span>
@@ -12,7 +12,12 @@
   {% comment %} <button class="filter-btn"><span>GemPad</span></button> {% endcomment %}
 
   {% for item_f in filt_and_sort.table_filters %}
-    <button class="filter-btn" data-name="{{ item_f.name }}" data-value="{{ item_f.value }}"=""><span>{{ item_f.label }}</span></button>
+    <button 
+      class="filter-btn{% if item_f.value %} filter-active{% endif %}" 
+      data-name="{{ item_f.name }}" 
+      data-value="{{ item_f.value }}" >
+      <span>{{ item_f.label }}</span>
+    </button>
   {% endfor %}
 
 

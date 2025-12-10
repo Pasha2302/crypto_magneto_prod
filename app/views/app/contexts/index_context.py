@@ -9,7 +9,8 @@ class IndexContextManager:
     def __init__(self, request: HttpRequest):
         self.request = request
         self.__context = BaseContextManager(self.request, name_page='index').get()
-        self.__client_params_table_filter = TableCoinParamsService.parse_from_request(self.request)
+        self.route_name = request.resolver_match.url_name
+        self.__client_params_table_filter = TableCoinParamsService.parse_from_request(self.request, self.route_name)
 
     @staticmethod
     def __set_data_coins(context, client_params):
@@ -28,5 +29,7 @@ class IndexContextManager:
 
     def get(self):
         self.__set_data_coins(self.__context, self.__client_params_table_filter)
+        self.__context['filter_page'] = self.route_name
+        self.__context['is_filter_page'] = self.route_name in ("new", "presale", "doxxed", "audited", "List_tokens")
         return self.__context
 

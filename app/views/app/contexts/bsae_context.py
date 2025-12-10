@@ -44,7 +44,7 @@ class BaseContextManager:
             {
                 'name': 'Promote', 'label': 'Promote your coin',
                 'cls': 'btn-header btn-promote',
-                'url': 'terms_page_view',
+                'url': '',
             },
             {
                 'name': 'Submit Token', 'label': 'Submit a new token',

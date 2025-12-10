@@ -39,8 +39,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         init_page_index(baseEv, apiClientJs);
 
     } else if ( namePage === 'page_coin' ) {
-        await import('../coin_page/charts/node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js');
+        await import('../../node_modules/lightweight-charts/dist/lightweight-charts.standalone.production.js');
         console.log('Lightweight Charts loaded');
+
+        // Правильный импорт Chart.js UMD
+        await import('../../node_modules/chart.js/dist/chart.umd.min.js');
+        console.log('Chart.js loaded');
+
         const { init_page_coin } = await import('../coin_page/coin.js');
         init_page_coin(baseEv, apiClientJs);
 
