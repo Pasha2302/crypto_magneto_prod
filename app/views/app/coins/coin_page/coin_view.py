@@ -250,16 +250,13 @@ class CoinPageContextManager:
         coin_obj.predictions_all = []
         if hasattr(coin_obj, 'predictions'):
             for data_predict in coin_obj.predictions.all():
-                year = data_predict.year
-                min_price = data_predict.min_price
-                avg_price = data_predict.avg_price
-                max_price = data_predict.max_price
-
                 coin_obj.predictions_all.append({
-                    "year": year,
-                    "min_price": min_price.normalize(),
-                    "avg_price": avg_price.normalize(),
-                    "max_price": max_price.normalize(),
+                    "year": data_predict.year,
+                    "min_price": data_predict.min_price.normalize(),
+                    "avg_price": data_predict.avg_price.normalize(),
+                    "max_price": data_predict.max_price.normalize(),
+                    "confidence": data_predict.confidence,
+                    "confidence_display": data_predict.get_confidence_display(),
                 })
 
         context['coin_obj'] = coin_obj
