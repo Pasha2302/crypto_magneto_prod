@@ -28,9 +28,9 @@
             {% endif %}
 
             <div class="token-price-changes-header">
-              {% include 'app/site/pages/coins/coin/components/comps/price_change_comp.dj.html' with price_change=coin_obj.price_change_1h only %}
+              {% include 'app/site/pages/coins/coin/components/comps/price_change_comp.dj.html' with price_change=coin_obj.price_change_1h la='1H' only %}
               <span class="price-change-separator">|</span>
-              {% include 'app/site/pages/coins/coin/components/comps/price_change_comp.dj.html' with price_change=coin_obj.price_change_24h only %}
+              {% include 'app/site/pages/coins/coin/components/comps/price_change_comp.dj.html' with price_change=coin_obj.price_change_24h la='24H' only %}
             </div>
           </div>
 

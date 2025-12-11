@@ -180,10 +180,19 @@ class CoinDataManager:
     def get_filter_and_sorted_data_table(self, only_columns=False):
         cp = self.client_params  # сокращение
         # Колонки сортировки
+        def format_column_label(l):
+            label = l.replace("_", " ")
+            match label:
+                case "CHANGE":
+                    label = "change 24H"
+
+            print(f"Label: {label}")
+            return label
+
         columns = [
             {
                 "value": f.value,
-                "label": f.name.replace("_", " ").title(),
+                "label": format_column_label(f.name),
                 "active": (cp.sort_field == f),
                 "direction": cp.sort_direction.value if cp.sort_field == f else None,
             }

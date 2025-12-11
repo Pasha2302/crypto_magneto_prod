@@ -1,11 +1,11 @@
 
 
   {% if price_change > 0 %}
-    <span class="price-change-item price-change-positive">+{{ price_change }}% ↑</span>
+    <span class="price-change-item price-change-positive">{{ la }}: +{{ price_change }}% ↑</span>
   {% elif price_change < 0 %}
-    <span class="price-change-item price-change-negative">{{ price_change }}% ↓</span>
+    <span class="price-change-item price-change-negative">{{ la }}: {{ price_change }}% ↓</span>
   {% elif price_change == 0 %}
-    <span class="price-change-item change-neutral">0.00%</span>
+    <span class="price-change-item change-neutral">{{ la }}: 0.00%</span>
   {% else %}
     <span class="price-change-item change-neutral">—</span>
   {% endif %}

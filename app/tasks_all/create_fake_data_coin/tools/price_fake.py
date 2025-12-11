@@ -128,12 +128,13 @@ class PriceFakeCreator(BaseFakeCreator):
 
         # если цена есть — применяем волатильность
         price_dec = self._decimal(current_price)
-        pct = self._percent_change(price_dec)
-        new_price = self._apply_percent(price_dec, pct)
+        pct_24h = self._percent_change(price_dec)
+        pct_1h = self._percent_change(price_dec)
+        new_price = self._apply_percent(price_dec, pct_1h)
 
         out["price"] = new_price
-        out["price_change_24h"] = float(round(pct, 6))  # храним в процентах, float ok
-        out["price_change_1h"] = float(round(pct, 6))
+        out["price_change_24h"] = float(round(pct_24h, 4))  # храним в процентах, float ok
+        out["price_change_1h"] = float(round(pct_1h, 4))
         # обновляем high/low: note — это просто текущая тик-логика; можно иметь reset по 24h
         if not getattr(coin, "high_24h_price", None) or new_price > coin.high_24h_price:
             out["high_24h_price"] = new_price

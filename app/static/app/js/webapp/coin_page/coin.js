@@ -43,7 +43,7 @@ function createChartTokenomics() {
                     color: '#fff',
                     font: {
                         weight: 'bold',
-                        size: 14
+                        size: 12
                     },
                     textAlign: 'center',
                     formatter: function(value, ctx) {
