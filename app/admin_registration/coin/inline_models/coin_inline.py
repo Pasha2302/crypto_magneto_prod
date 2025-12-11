@@ -36,6 +36,7 @@ class SafetyAndAuditInline(admin.StackedInline):
 class CoinPredictionInline(admin.StackedInline):
     model = CoinPrediction
     extra = 1
+    max_num = 3
 
 class PieChartDataInline(admin.StackedInline):
     model = PieChartData

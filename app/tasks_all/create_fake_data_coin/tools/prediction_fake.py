@@ -37,8 +37,6 @@ class FakePredictionCreator(BaseFakeCreator):
 
     def _make_year_prediction(self, base_price: Decimal, year_offset: int, target_year: int):
         lo, hi = self.VOLATILITY[year_offset]
-
-        # drift всегда Decimal
         drift = Decimal(str(self._rand.uniform(lo, hi)))
         one = Decimal("1")
 
