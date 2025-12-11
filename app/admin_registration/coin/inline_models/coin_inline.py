@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 
 from app.admin_registration.admin_forms.widgets.image_file_input import ImageFileInput
-from app.db_models import CoinSocial, SafetyAndAudit, CoinPrediction
+from app.db_models import CoinSocial, SafetyAndAudit, CoinPrediction, PieChartData
 
 
 # class ContractAddressInline(admin.TabularInline):
@@ -36,3 +36,11 @@ class SafetyAndAuditInline(admin.StackedInline):
 class CoinPredictionInline(admin.StackedInline):
     model = CoinPrediction
     extra = 1
+
+class PieChartDataInline(admin.StackedInline):
+    model = PieChartData
+    extra = 1
+    max_num = 4
+
+    autocomplete_fields = ('label', )
+

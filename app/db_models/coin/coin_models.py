@@ -1,5 +1,6 @@
 from urllib.parse import urljoin
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.text import slugify
 from django.utils import timezone
@@ -230,6 +231,33 @@ class TeamCoin(models.Model):
 
 
 # =================================================================================================================== #
+
+class LabelPieChart(models.Model):
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name_plural = 'Label Pie Charts'
+
+    def __str__(self):
+        return f"{self.name or ''}"
+
+class PieChartData(models.Model):
+    coin = models.ForeignKey('Coin', on_delete=models.CASCADE, related_name="pie_charts", null=True, blank=True)
+    label = models.ForeignKey(LabelPieChart, on_delete=models.CASCADE, related_name="pie_charts")
+    value = models.FloatField(
+        validators=[
+            MinValueValidator(0.0),
+            MaxValueValidator(100.0)
+        ]
+    )
+
+    class Meta:
+        ordering = ('pk',)
+        verbose_name_plural = 'Pie Charts Datas'
+
+    def __str__(self):
+        return f"{self.coin.name if self.coin else ''}|{self.label.name or ''}|{self.value}"
 
 class Coin(models.Model):
     # Основная информация

@@ -8,25 +8,32 @@ import { DataProviderMock } from './charts/chart_coin_price/tools/data_provider.
 
 function createChartTokenomics() {
     const data = JSON.parse(
-        document.getElementById('chart-tokenomics-mocke-json').textContent
+        document.getElementById('pie_chart_data-json').textContent
     );
 
     data.values = data.values.map(Number);
+    window.pieChartData = data;
 
     const Chart = window.Chart;
     const ctx = document.getElementById('tokenomics-chart').getContext('2d');
+
+    // Генерация красивых цветов под любое количество сегментов
+    const colors = [
+        'rgba(75, 192, 192, 0.7)',
+        'rgba(255, 159, 64, 0.7)',
+        'rgba(153, 102, 255, 0.7)',
+        'rgba(255, 205, 86, 0.7)',
+        'rgba(201, 203, 207, 0.7)',
+        'rgba(54, 162, 235, 0.7)',
+    ];
 
     new Chart(ctx, {
         type: 'pie',
         data: {
             labels: data.labels,
             datasets: [{
-                data: data.values,
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(255, 159, 64, 0.6)',
-                    'rgba(153, 102, 255, 0.6)'
-                ],
+                data: data.values,   // <-- Готовые проценты
+                backgroundColor: colors.slice(0, data.values.length),
                 borderWidth: 1
             }]
         },
@@ -38,31 +45,29 @@ function createChartTokenomics() {
                         weight: 'bold',
                         size: 14
                     },
+                    textAlign: 'center',
                     formatter: function(value, ctx) {
-                        const total = ctx.chart.data.datasets[0].data
-                            .reduce((a, b) => a + b, 0);
-                        const percent = (value / total * 100).toFixed(1);
-                        return `${percent}%`;  // ← текст на диаграмме
+                        const label = ctx.chart.data.labels[ctx.dataIndex];
+                        return `${label}\n${value}%`;   // <-- Прямо на пироге
                     }
                 },
                 tooltip: {
+                    enabled: true,
                     callbacks: {
                         label: function(ctx) {
-                            const value = ctx.raw;
-                            const total = ctx.dataset.data.reduce((a,b)=>a+b,0);
-                            const percent = (value / total * 100).toFixed(1);
-                            return `${ctx.label}: ${value.toLocaleString()} (${percent}%)`;
+                            return `${ctx.label}: ${ctx.raw}%`;
                         }
                     }
                 },
                 legend: {
-                    position: 'bottom'
+                    position: 'left'
                 }
             }
         },
         plugins: [ChartDataLabels]
     });
 }
+
 
 
 

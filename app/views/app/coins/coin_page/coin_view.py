@@ -121,8 +121,8 @@ def aggregate_yearly(data):
 
 def get_tokenomics_data(coin_obj: Coin) -> dict:
     """
-    Формирует логичные данные токеномики для круговой диаграммы.
-    Использует circulating_supply, total_supply и max_supply.
+        Формирует данные токеномики для круговой диаграммы.
+        Использует circulating_supply, total_supply и max_supply.
     """
 
     circulating = coin_obj.circulating_supply or 0
@@ -211,7 +211,6 @@ class CoinPageContextManager:
             chain__symbol__iexact=chain_symbol,  # без учёта регистра
             slug=coin_slug
         )
-        context['chart_tokenomics_mocke'] = get_tokenomics_data(coin_obj)
 
         coin_obj.launch_date = formatted_launch_date(date_type=coin_obj.launch_date)
         coin_obj.symbol = coin_obj.symbol if coin_obj.symbol.startswith('$') else f"${coin_obj.symbol}"
@@ -289,6 +288,27 @@ class CoinPageContextManager:
         meta_tags['title'] = f"{coin_name} ({coin_symbol}) - Chart, Price And Market Cap."
         meta_tags['description'] = f"Track {coin_name} volume, market cap, chart and price."
 
+    @staticmethod
+    def __set_pie_chart_data(context):
+        coin_obj: Coin = context['coin_obj']
+
+        if hasattr(coin_obj, 'pie_charts') and coin_obj.pie_charts.all().exists():
+            print(f"Pie Chart Data: {getattr(coin_obj, 'pie_charts')}")
+            labels = []
+            values = []
+            qs_pie_charts = coin_obj.pie_charts.all()
+            for obj in qs_pie_charts:
+                labels.append(obj.label.name)
+                values.append(obj.value)
+
+            context['pie_chart_data'] = {
+                "labels": labels,
+                "values": values,
+            }
+
+        else: context['pie_chart_data'] = {}
+
+
     def get(self) -> dict:
         self.__set_data_coin(self.__context, self.chain_symbol, self.coin_slug)
         self.__set_more_coins(self.__context, self.chain_symbol, self.coin_slug)
@@ -296,6 +316,7 @@ class CoinPageContextManager:
         self.__context['chart_price_mocke'] = self.__get_data_chart_price(
             self.__context['coin_obj'].price, self.__context['coin_obj'].pk
         )
+        self.__set_pie_chart_data(self.__context)
 
         self.__set_meta_tags(self.__context)
         return self.__context

@@ -1,13 +1,16 @@
 
+{% if pie_chart_data %}
+  <style>
+    .tokenomics-chart-container {
+      width: 100%;
+      height: 95%;
+    }
+  </style>
 
-<style>
-  .tokenomics-chart-container {
-    width: 100%;
-    height: 400px;
-  }
-</style>
 
-<div class="tokenomics-chart-container">
-  {{ chart_tokenomics_mocke|json_script:'chart-tokenomics-mocke-json' }}
-  <canvas id="tokenomics-chart" ></canvas>
-</div>
+  <div class="tokenomics-chart-container">
+    {{ pie_chart_data|json_script:'pie_chart_data-json' }}
+    <canvas id="tokenomics-chart" ></canvas>
+  </div>
+  
+{% endif %}

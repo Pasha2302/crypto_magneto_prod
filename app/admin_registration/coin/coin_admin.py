@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 
 from app.admin_registration.admin_forms.widgets.image_file_input import ImageFileInput
 from app.admin_registration.coin.inline_models.coin_inline import CoinSocialInline, SafetyAndAuditInline, \
-    CoinPredictionInline
+    CoinPredictionInline, PieChartDataInline
 from app.db_models import BaseCoin
 from app.db_models.coin.coin_models import Coin, PromotedCoin
 
@@ -101,7 +101,7 @@ class CoinAdmin(admin.ModelAdmin):
     ordering = ['-created_at']  # Сортировка по убыванию — сначала новые
     list_filter = ('is_published', )  # Фильрация по полю в общем списке.
 
-    inlines = (SafetyAndAuditInline, CoinPredictionInline, CoinSocialInline, )
+    inlines = (SafetyAndAuditInline, CoinPredictionInline, PieChartDataInline, CoinSocialInline, )
 
     filter_horizontal = ('categories', 'labels', 'team')
 
