@@ -186,7 +186,7 @@ class CoinDataManager:
                 case "CHANGE":
                     label = "change 24H"
 
-            print(f"Label: {label}")
+            # print(f"Label: {label}")
             return label
 
         columns = [
