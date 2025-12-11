@@ -78,19 +78,17 @@ class BaseContextManager:
     def __get_data_meta_tags(self, base_img_obj):
         base_img_url = base_img_obj.img_240.url if base_img_obj else ''
         return {
+            "site_name": "CryptoMagneto",
             # Заголовок страницы, используется в og:title и twitter:title
-            "title": "AstroWhales | Whale Alert Signals",
+            "title": "CryptoMagneto - Magnetic Crypto Minds",
             # Описание страницы, используется в og:description, twitter:description и meta name="description"
-            "description": (
-                "Our Whale Tracker is designed to help you monitor large transactions and understand "
-                "their impact on the crypto market. Get live updates and follow your favorite token."
-            ),
+            "description": "CryptoMagneto - The hub for influential blockchain minds, news and magnetic alpha.",
             # URL текущей страницы, используется в og:url
             "url": self.request.build_absolute_uri("/"),
             # URL изображения, используется в og:image и twitter:image
             "image_url": self.request.build_absolute_uri(base_img_url),
             # Альтернативный текст для изображения, используется в twitter:image:alt
-            "image_alt": "AstroWhales site-image",
+            "image_alt": "CryptoMagneto site-image",
         }
 
     @staticmethod
@@ -106,6 +104,8 @@ class BaseContextManager:
         return datas
 
     def get(self) -> dict:
+        self.context['current_page_url'] = self.request.build_absolute_uri()
+
         self.context["images_obj"] = self.get_images_for_pages()
         self.context["menu_items"] = self.__get_data_menu(self.name_p)
         self.context["meta"] = self.__get_data_meta_tags(self.context["images_obj"].get('main', ''))

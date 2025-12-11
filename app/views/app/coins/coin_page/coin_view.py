@@ -247,6 +247,21 @@ class CoinPageContextManager:
         coin_obj.socials_qs = coin_obj.socials.all()
         coin_obj.team_members = coin_obj.team.all()
 
+        coin_obj.predictions_all = []
+        if hasattr(coin_obj, 'predictions'):
+            for data_predict in coin_obj.predictions.all():
+                year = data_predict.year
+                min_price = data_predict.min_price
+                avg_price = data_predict.avg_price
+                max_price = data_predict.max_price
+
+                coin_obj.predictions_all.append({
+                    "year": year,
+                    "min_price": min_price.normalize(),
+                    "avg_price": avg_price.normalize(),
+                    "max_price": max_price.normalize(),
+                })
+
         context['coin_obj'] = coin_obj
 
     @staticmethod
@@ -266,6 +281,16 @@ class CoinPageContextManager:
 
         context['more_coins'] = qs_more_coins
 
+    @staticmethod
+    def __set_meta_tags(context):
+        coin_obj: Coin = context['coin_obj']
+        meta_tags = context['meta']
+
+        coin_name = coin_obj.name
+        coin_symbol = coin_obj.symbol
+
+        meta_tags['title'] = f"{coin_name} ({coin_symbol}) - Chart, Price And Market Cap."
+        meta_tags['description'] = f"Track {coin_name} volume, market cap, chart and price."
 
     def get(self) -> dict:
         self.__set_data_coin(self.__context, self.chain_symbol, self.coin_slug)
@@ -274,6 +299,8 @@ class CoinPageContextManager:
         self.__context['chart_price_mocke'] = self.__get_data_chart_price(
             self.__context['coin_obj'].price, self.__context['coin_obj'].pk
         )
+
+        self.__set_meta_tags(self.__context)
         return self.__context
 
 

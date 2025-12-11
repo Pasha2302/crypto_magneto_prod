@@ -184,9 +184,9 @@ class CoinPrediction(models.Model):
 
     coin = models.ForeignKey("Coin", on_delete=models.CASCADE, related_name="predictions")
     year = models.PositiveIntegerField()
-    min_price = models.DecimalField(max_digits=20, decimal_places=2)
-    avg_price = models.DecimalField(max_digits=20, decimal_places=2)
-    max_price = models.DecimalField(max_digits=20, decimal_places=2)
+    min_price = models.DecimalField(max_digits=30, decimal_places=18)
+    avg_price = models.DecimalField(max_digits=30, decimal_places=18)
+    max_price = models.DecimalField(max_digits=30, decimal_places=18)
 
     confidence = models.CharField(
         max_length=10,

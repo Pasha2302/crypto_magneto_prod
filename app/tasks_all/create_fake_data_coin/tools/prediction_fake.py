@@ -70,6 +70,9 @@ class FakePredictionCreator(BaseFakeCreator):
 
         if not coin.price:
             return None
+        # --- Если уже есть прогнозы — выходим ---
+        if coin.predictions.exists():
+            return None
 
         base_price = Decimal(str(coin.price))
         current_year = timezone.now().year
@@ -91,8 +94,6 @@ class FakePredictionCreator(BaseFakeCreator):
                 )
             )
 
-        # Сначала удалить старые прогнозы
-        coin.predictions.all().delete()
         # Массовое создание
         CoinPrediction.objects.bulk_create(predictions)
         return None

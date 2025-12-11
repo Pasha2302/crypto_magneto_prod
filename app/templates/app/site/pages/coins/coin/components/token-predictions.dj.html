@@ -16,7 +16,7 @@
           </thead>
           <tbody>
 
-            {% for p in coin_obj.predictions.all %}
+            {% for p in coin_obj.predictions_all %}
               <tr>
                 <td>{{ p.year }}</td>
                 <td>${{ p.min_price }}</td>

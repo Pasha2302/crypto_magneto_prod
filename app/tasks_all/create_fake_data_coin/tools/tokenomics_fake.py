@@ -167,39 +167,88 @@ class FakeTokenomicsCreator(BaseFakeCreator):
         return self._dec(value, precision)
 
     def generate(self, coin: Coin) -> Dict[str, object]:
-        # SUPPLY
+
+        # ------------------------------
+        #  1) BASE SUPPLY INITIALIZATION
+        # ------------------------------
+
+        # Если какое-то значение есть — значит все должны быть > 0
+        supply_known = any([
+            coin.max_supply,
+            coin.total_supply,
+            coin.circulating_supply,
+            coin.market_cap,
+        ])
+
+        # 1) MAX SUPPLY
         max_supply = (
             Decimal(coin.max_supply)
             if coin.max_supply
             else self._rand_range_dec(self.supply_min, self.supply_max)
         )
+        if supply_known and max_supply <= 0:
+            max_supply = self._rand_range_dec(self.supply_min, self.supply_max)
 
+        # 2) TOTAL SUPPLY
         total_supply = (
             Decimal(coin.total_supply)
             if coin.total_supply
-            else self._rand_range_dec(max_supply * Decimal("0.3"), max_supply)
+            else self._rand_range_dec(max_supply * Decimal("0.3"), max_supply * Decimal("0.95"))
         )
+        if supply_known and total_supply <= 0:
+            total_supply = self._rand_range_dec(max_supply * Decimal("0.3"), max_supply * Decimal("0.95"))
 
+        # 3) CIRCULATING SUPPLY
         circulating_supply = (
             Decimal(coin.circulating_supply)
             if coin.circulating_supply
-            else self._rand_range_dec(total_supply * Decimal("0.1"), total_supply)
+            else self._rand_range_dec(total_supply * Decimal("0.1"), total_supply * Decimal("0.85"))
         )
+        if supply_known and circulating_supply <= 0:
+            circulating_supply = self._rand_range_dec(total_supply * Decimal("0.1"), total_supply * Decimal("0.85"))
 
-        # MARKET CAP
+        # Гарантия порядка
+        if circulating_supply >= total_supply:
+            circulating_supply = total_supply * Decimal("0.7")
+
+        if total_supply >= max_supply:
+            total_supply = max_supply * Decimal("0.85")
+
+        # Округление
+        max_supply = self._dec(max_supply, 0)
+        total_supply = self._dec(total_supply, 0)
+        circulating_supply = self._dec(circulating_supply, 0)
+
+        # ------------------------------
+        #  2) MARKET CAP / FDV
+        # ------------------------------
+
         if coin.price:
-            # market_cap = Decimal(coin.price) * circulating_supply
-            market_cap = Decimal(coin.price) * Decimal(self._rand.uniform(100.0, 430.0))
-            market_cap = self._cap(market_cap, self.MAX_MARKET_CAP, precision=2)
+            price = Decimal(coin.price)
         else:
-            market_cap = self._rand_range_dec(
-                self.cap_min,
-                self.cap_max,
-                precision=2,
-            )
-            market_cap = self._cap(market_cap, self.cap_max)
+            # генерируем "реалистичную" цену 0.0001–2000
+            price = self._rand_range_dec(Decimal("0.0001"), Decimal("2000"), precision=6)
 
-        # LIQUIDITY
+        # Основной рынок (циркулирующая капитализация)
+        market_cap = price * circulating_supply
+        market_cap = self._cap(market_cap, self.MAX_MARKET_CAP, precision=2)
+
+        # Fully Diluted Valuation
+        fdv = price * max_supply
+        fdv = self._cap(fdv, self.MAX_MARKET_CAP, precision=2)
+
+        # Правило: FDV > Market Cap
+        if fdv <= market_cap:
+            fdv = market_cap * Decimal("1.15")
+
+        # Если у монеты есть market cap и оно > 0 — уважить его
+        if coin.market_cap and Decimal(coin.market_cap) > 0:
+            market_cap = Decimal(coin.market_cap)
+
+        # ------------------------------
+        #  3) LIQUIDITY
+        # ------------------------------
+
         liquidity_usd = (
             Decimal(coin.liquidity_usd)
             if coin.liquidity_usd
@@ -207,17 +256,28 @@ class FakeTokenomicsCreator(BaseFakeCreator):
         )
         liquidity_usd = self._cap(liquidity_usd, self.MAX_LIQUIDITY)
 
-        # VOLUME
+        # ------------------------------
+        #  4) VOLUME
+        # ------------------------------
+
         volume_usd = self._rand_range_dec(self.volume_min, self.volume_max, precision=2)
         volume_usd = self._cap(volume_usd, self.MAX_VOLUME)
+
         volume_btc = self._dec(volume_usd / self.BTC_PRICE, precision=8)
+
+        # ------------------------------
+        #  RESULT
+        # ------------------------------
 
         return {
             "max_supply": max_supply,
             "total_supply": total_supply,
             "circulating_supply": circulating_supply,
             "market_cap": market_cap,
+            "fdv": fdv,
             "liquidity_usd": liquidity_usd,
             "volume_usd": volume_usd,
             "volume_btc": volume_btc,
+            "price": price,
         }
+

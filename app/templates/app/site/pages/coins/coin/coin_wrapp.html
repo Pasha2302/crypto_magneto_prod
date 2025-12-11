@@ -2,7 +2,9 @@
 {% load static %}
 
 
-{% block title %}{% endblock %}
+{% block title %}
+  {{ meta.title }}
+{% endblock %}
 
 {% block extra_head %}{% endblock %}
 
@@ -40,7 +42,7 @@
     {% include 'app/site/pages/coins/coin/components/token-predictions.dj.html' %}
 
     {% comment %} FAQ: {% endcomment %}
-    {% include 'app/site/pages/coins/coin/components/faq-section.dj.html' %}
+    {% comment %} {% include 'app/site/pages/coins/coin/components/faq-section.dj.html' %} {% endcomment %}
 
     {% comment %} More Tokens: {% endcomment %}
     {% include 'app/site/pages/coins/coin/components/more_tokens_section.dj.html' %}
