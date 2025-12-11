@@ -22,7 +22,7 @@ function createChartTokenomics() {
         'rgba(75, 192, 192, 0.7)',
         'rgba(255, 159, 64, 0.7)',
         'rgba(153, 102, 255, 0.7)',
-        'rgba(255, 205, 86, 0.7)',
+        'rgba(216, 58, 216, 0.7)',
         'rgba(201, 203, 207, 0.7)',
         'rgba(54, 162, 235, 0.7)',
     ];
@@ -48,7 +48,8 @@ function createChartTokenomics() {
                     textAlign: 'center',
                     formatter: function(value, ctx) {
                         const label = ctx.chart.data.labels[ctx.dataIndex];
-                        return `${label}\n${value}%`;   // <-- Прямо на пироге
+                        // return `${label}\n${value}%`;   // <-- label на пироге
+                        return `${value}%`;   // <-- label на пироге
                     }
                 },
                 tooltip: {
